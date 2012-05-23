@@ -1,0 +1,20 @@
+script(src='http://128.82.242.213:3000/socket.io/socket.io.js')
+script(type='text/javascript', src='http://www.google.com/jsapi?key=ABQIAAAABHNYfw0c8TY6Kky2VsUIZBRxJlqEZOtgAh70Ol2NSRYv2PjlVBSDCmUQ6agcFV6SxfsHMzbanQvMJg')
+script(type='text/javascript', src='/javascripts/content.js')
+script(type='text/javascript', src='/javascripts/teacher.js')
+script(type='text/javascript', src='/javascripts/scr.js')
+span.leftPart
+	input#toggleTerrain(type='button', name='terrain', value='Terrain ON/OFF', onclick='VFT.lahar.teacher.buttons.setTerrain()')
+	input#startExercise(type='button', name='start', value='Start', onclick='VFT.lahar.teacher.buttons.start()')
+	input#timeAvailable(type='text', placeholder='Time in minutes...')
+	input#stopExercise(type='button', name='stop', value='Stop', onclick='VFT.lahar.teacher.buttons.stop()')
+#map3d
+div(style='position:absolute; left:17px; top:62px; width:5em; height:1.5em')
+	#preko1(style='position:absolute; left:0; top:0; width:98%; height:98%; z-index:9')
+		#countDown Timer
+	iframe(style='position:absolute; left:0px; top:0px; width:100%; height:100%; z-index:8', frameborder='0', scroling='no', scr='javascript:void(0)')
+#studentInterface
+	#chatBox
+	input#message(type='text', onkeypress='VFT.helpers.onEnter(event)')
+	input#chatSend(type='button', name='Send', value='Send', onclick='VFT.helpers.sendMessage()')
+	input#mapTransparency(type='range', min='0', max='100', value='100', onchange='VFT.lahar.opacity(this.value/100)', title='Set map transparency')

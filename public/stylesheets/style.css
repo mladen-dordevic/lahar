@@ -1,0 +1,140 @@
+body {
+  margin: 0px auto;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background-color:#FFFFCC;
+}
+#header {
+	margin: 5px;
+	padding-bottom: 5px;
+}
+#mainHeader{
+	margin: 0px auto;
+}
+#usersSection{
+	margin: 3px auto;
+	float:right;
+}
+#studentInterface{
+	padding-top: 10px;
+	margin-top: 10px;
+	margin: 0px auto;
+	width: 100%;
+}
+#countDown{
+	border: 1px solid #999999;
+	background-color:#CCFF00;
+	padding:2px;
+	width:5em;
+}
+#chatBox{
+	border: 4px inset  #CCCCCC;
+	background-color:#CCFFCC;
+	height: 110px;
+	width: 97%;
+	overflow: auto;
+	padding-left: 2%;
+}
+#message{
+	border: 1px outset #999999;
+	background-color:#CCFFFF;
+	width: 85%;
+	float:left;
+	padding: 5px;
+	margin-top: 5px ;
+}
+#chatSend{
+	width: 10%;
+	float:right;
+	padding: 5px;
+	margin-top: 4px ;
+}
+#map3d{
+	height: 60%;
+	width: 100%;
+	margin: 0px auto;
+	z-index: 110;
+}
+#footer{
+	background-color: #DDFFFF;
+	position: absolute;
+	bottom: 0px;
+	border-top:1px solid #CCCCCC;
+	width: 99.99%;
+	height: auto;
+	font-size:10px;
+	margin: 0px auto;
+	text-align:center;
+}
+#container {
+	border-top: 3px double #33CCFF;
+	border: 1px hidden;
+	min-width: 1px;
+	padding-right:1em;
+	padding-top:.5em;
+	margin: 1em ;
+}
+#logingIn{
+	z-index: 100;
+	width: 200px;
+	height : 250px;
+	margin: 0em auto;
+	margin-top:10%;
+	position:relative;
+	background-color:#FC0;
+	border: 1px solid #999999;
+	padding: 3px;
+}
+.box{
+	display: block;
+	border: 1px solid #999999;
+	margin:20px;
+	padding : 20px;
+	text-align:center;
+}
+.notifications{
+	width: 99.5%;
+	border-top:1px solid #CCCCCC;
+	font-size:12px;
+	margin:0px auto;
+	text-align:center;
+}
+.warning{
+	display: block;
+	border: 1px solid #999999;
+	background-color: #FF0000;
+	margin:0px auto;
+	padding-top:0.2em;
+	padding-bottom:0.2em;
+}
+.alert{
+	display: block;
+	border: 1px solid #999999;
+	background-color: #FFFF00;
+	margin:0px auto;
+	padding-top:0.2em;
+	padding-bottom:0.2em;
+}
+.info{
+	display: block;
+	border: 1px solid #999999;
+	background-color: #00FF00;
+	margin:0px auto;
+	padding-top:0.2em;
+	padding-bottom:0.2em;
+}
+.inputAlined{
+	margin: 0em auto;
+	background-color:#FFFFFF;
+	padding: 3px;
+}
+.rightPart{
+	float:right;
+	border: 1px hidden #999999;
+	padding-bottom: 3px;
+}
+.leftPart{
+	float: left;
+}
+.smallFont{
+	font-size:12px;
+}

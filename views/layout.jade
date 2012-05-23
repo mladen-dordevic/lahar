@@ -1,0 +1,31 @@
+!!!
+html
+	head
+		title Lahar
+		link(rel='stylesheet', href='/stylesheets/style.css')
+	body
+		#header
+			#mainHeader
+				#usersSection
+					- if (session.user)
+						#name(style='display:none', value=session.user.name)#{session.user.name}
+						#lastName(style='display:none', value=session.user.lastName)#{session.user.lastName}
+						#email(style='display:none', value=session.user.email)#{session.user.email}
+						#level(style='display:none', value=session.user.level)#{session.user.level}
+						#key(style='display:none', value=session.user.key)#{session.user.key}
+						a(href='/logout') Sign Out
+
+			.notifications
+				- if(flash.warning)
+						.warning #{flash.warning}
+				- if(flash.alert)
+						.alert #{flash.alert}
+				- if(flash.info)
+						.info #{flash.info}
+		#container!= body
+		#footer
+			p Lahar exercise Copyright © 2012 ODU team. All rights reserved.
+				p
+					a(href='copyright') Copyright/IP Policy  |
+					a(href='terms') Terms of Service  |
+					a(href='privacy') Privacy Policy
