@@ -134,10 +134,6 @@ app.post('/new/teacher',function(req,res){
 		res.render('new/account', {locals : {id: req.body.accountId}});
 });
 
-
-
-
-
 app.post('/', function(req, res){
 	users.validate(req.body.username, req.body.password, function(level,user){
 		if(level){
@@ -155,7 +151,7 @@ app.post('/', function(req, res){
 			}
 		}
 		else{
-			req.flash('warning', 'Loging faild');
+			req.flash('warning', 'Login failed');
 			res.render('index');
 		}
 	})
@@ -213,23 +209,29 @@ io.sockets.on('connection', function (socket) {
 	});
 	socket.on('message',function(data){
 		//console.log('Brodcasting to', socket.user.key);
-		var send = {
-			name : socket.user.firstName,
-			text : data
+		if(socket.user){
+			var send = {
+				name : socket.user.firstName,
+				text : data
+			};
+			socket.broadcast.to(socket.user.key).emit('message',send);
 		}
-		socket.broadcast.to(socket.user.key).emit('message',send);
 	});
 	socket.on('start excersize', function(data){
-		socket.broadcast.to(socket.user.key).emit('start excersize',data);
+		if(socket.user)
+			socket.broadcast.to(socket.user.key).emit('start excersize',data);
 	});
 	socket.on('stop excersize', function(){
-		socket.broadcast.to(socket.user.key).emit('stop excersize');
+		if(socket.user)
+			socket.broadcast.to(socket.user.key).emit('stop excersize');
 	});
 	socket.on('enable terrain',function(){
-		socket.broadcast.to(socket.user.key).emit('enable terrain');
+		if(socket.user)
+			socket.broadcast.to(socket.user.key).emit('enable terrain');
 	});
 	socket.on('disable terrain',function(){
-		socket.broadcast.to(socket.user.key).emit('disable terrain');
+		if(socket.user)
+			socket.broadcast.to(socket.user.key).emit('disable terrain');
 	});
 	socket.on('disconnect', function () {
 		if(socket.user){

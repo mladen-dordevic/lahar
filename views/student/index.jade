@@ -4,21 +4,27 @@ script(type='text/javascript', src='/javascripts/content.js')
 script(type='text/javascript', src='/javascripts/student.js')
 script(type='text/javascript', src='/javascripts/scr.js')
 
+span.rightPart.blueBox Time left: 
+	progress#countDownProgress(value='100', max='100')
+	span.smallFont#countDown
+
 span.leftPart
-	input#evacuateCity(type='button', name='Evacuate', value='Evacuate')
-	input#stayInCity(type='button', name='Stay', value='Stay')
-	input#mapTransparency(type='range', min='0', max='100', value='100', onchange='VFT.lahar.opacity(this.value/100)')
+	input#evacuateCity(type='button', class='button', name='Evacuate', value='Evacuate')
+	input#stayInCity(type='button',class='button', name='Stay', value='Stay')
+	span.blueBox Map transparency
+		input#mapTransparency(type='range', min='0', max='100', value='100', onchange='VFT.lahar.opacity(this.value/100)', title='Set map transparency')
+
 #map3d
 
-div(style='position:absolute; left:17px; top:70px; width:5em; height:1.5em')
-	#preko1(style='position:absolute; left:0; top:0; width:98%; height:98%; z-index:9')
-		#countDown Timer
-	iframe(style='position:absolute; left:0px; top:0px; width:100%; height:100%; z-index:8', frameborder='0', scroling='no', scr='javascript:void(0)')
-
+#legend(style='position:absolute; left:17px; top:67px; width:1.6em; height:1.4em')
+		#preko1(style='position:absolute; left:0; top:0; width:100%; height:100%; z-index:9')
+			input#legendButton(type='button', value='+', onclick='VFT.lahar.student.button.legend()')
+			#legendImage
+		iframe(style='position:absolute; left:0px; top:0px; width:100%; height:100%; z-index:8', frameborder='0', scroling='no', scr='javascript:void(0)')
 
 #studentInterface
 	#chatBox
-	input#message(type='text', onkeypress='VFT.helpers.onEnter(event)' )
-	input#chatSend(type='button', name='Send', value='Send', onclick='VFT.helpers.sendMessage()')
-
+	div
+		input#message(type='text', onkeypress='VFT.helpers.onEnter(event)' )
+		input#chatSend(type='button', name='Send', value='Send', onclick='VFT.helpers.sendMessage()')
 

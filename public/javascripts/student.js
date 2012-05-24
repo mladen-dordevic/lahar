@@ -3,17 +3,45 @@ VFT.lahar = {};
 VFT.lahar.student = (function(){
 	var socket = VFT.helpers.socket;
 	var interval = null;
+	var legendOn = false;
+	var reset = function(){$('countDown').innerHTML = ''};
+	var legend = function(){
+		if(!legendOn){
+			var oImg = document.createElement("img");
+			oImg.setAttribute('src', VFT.util.qualifyURL('../images/legend.png'));
+			oImg.setAttribute('height', '176px');
+			oImg.setAttribute('width', '201px');
+			oImg.setAttribute('onclick', 'VFT.lahar.student.button.legend()');
+			$('legendImage').appendChild(oImg);
+			var frame = $('legend')
+			frame.style.height = '176px';
+			frame.style.width = '201px';
+			$('legendButton').value = '-';
+			legendOn = true;
+		}
+		else{
+			$('legendImage').removeChild($('legendImage').childNodes[0]);
+			var frame = $('legend')
+			frame.style.height = '1.4em';
+			frame.style.width = '1.6em';
+			$('legendButton').value = '+';
+			legendOn = false;
+		};
+	};
 	var start = function(time){
 		var countDown = function(){
 			$('countDown').innerHTML = time.toString();
+			$('countDownProgress').max = time.toString();
 			clearInterval(interval);
 			var timer = function(){
 				var timeLocal = $('countDown').innerHTML *1;
 				if (timeLocal > 1){
 					$('countDown').innerHTML = (timeLocal -1 ).toString();
+					$('countDownProgress').value = (timeLocal -2 ).toString();
 				}
 				else{
 					$('countDown').innerHTML = 'Time is up!';
+					setTimeout(reset,10000)
 					VFT.util.notification.add('Time is up!',2,10);
 					VFT.sound.alert.play();
 					clearInterval(interval);
@@ -31,6 +59,9 @@ VFT.lahar.student = (function(){
 		events :{
 			start : start,
 			stop : stop
+		},
+		button:{
+			legend:legend
 		}
 	}
 })();

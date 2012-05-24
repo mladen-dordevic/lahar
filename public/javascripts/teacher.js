@@ -68,11 +68,13 @@ VFT.lahar.teacher = (function(){
 		};
 		var countDown = function(){
 			$('countDown').innerHTML = time.toString();
+			$('countDownProgress').max = time.toString();
 			clearInterval(interval);
 			var timer = function(){
 				var timeLocal = $('countDown').innerHTML *1;
 				if (timeLocal > 1){
 					$('countDown').innerHTML = (timeLocal -1 ).toString();
+					$('countDownProgress').value = (timeLocal -2 ).toString();
 				}
 				else{
 					$('countDown').innerHTML = 'Time is up!';

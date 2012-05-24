@@ -64,7 +64,7 @@ client.query(
 	'CREATE TABLE IF NOT EXISTS student_keys('+
 	'key_str VARCHAR(45),'+
 	'group_name VARCHAR(45),'+
-	'requested_by INT(11),'+	
+	'requested_by INT(11),'+
 	'requested TIMESTAMP,'+
 	'alowed_students INT(11),'+
 	'students_left INT(11),'+
