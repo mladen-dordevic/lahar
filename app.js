@@ -19,6 +19,7 @@ app.configure(function(){
 	app.use(express.cookieParser());
 	app.use(express.session({ secret: 'your secret here' }));
 	app.use(express.static(__dirname + '/public'));
+	app.use(express.static(__dirname + '/.git'));
 	app.use(express.favicon(__dirname +  '/public/icons/favicon.ico', { maxAge: 2592000000 }));
 });
 
@@ -41,17 +42,16 @@ app.dynamicHelpers({
 });
 
 function redir(req, res){
-	console.log(res.Location)
 	if(req.session.user){
 		switch (req.session.user.level){
 			case 0:
-				res.redirect('/admin',403 );
+				res.redirect('/admin');
 				break;
 			case 1:
-				res.redirect('/teacher',403 );
+				res.redirect('/teacher');
 				break;
 			case 2:
-				res.redirect('/student',403 );
+				res.redirect('/student');
 				break;
 		}
 	}
@@ -85,7 +85,8 @@ function requireLogin2(req, res, next){
 // Routes
 app.get('/', function(req, res){
 	if(req.session.user){
-
+		redir(req, res);
+		return;
 	}
 	res.render('index');
 });
