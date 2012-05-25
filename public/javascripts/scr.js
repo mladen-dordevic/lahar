@@ -86,9 +86,22 @@ VFT.helpers.socket.on('initiate',function(user){
 });
 
 VFT.helpers.socket.on('message',function(data){
-	var now = new Date;
-	var con = '<font size="1" face="Arial Narrow" color="grey">' + now.toTime() + '</font>'+ '\t<b>' + data.name + '</b> : '+ data.text;
-	VFT.helpers.appendMessage('chatBox',con);
+	var process = function(data){
+		var now = new Date;
+		var con = '<font size="1" face="Arial Narrow" color="grey">' + now.toTime() + '</font>'+ '\t<b>' + data.name + '</b> : '+ data.text;
+		VFT.helpers.appendMessage('chatBox',con);
+	}
+	if(data.length>0){
+		data.forEach(function(n){
+			process(n);
+		});
+	}
+	else if(data.length == 0){
+		return
+	}
+	else{
+		process(data);
+	}
 	VFT.sound.message.play();
 });
 

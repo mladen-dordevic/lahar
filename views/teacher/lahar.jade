@@ -4,14 +4,14 @@ script(type='text/javascript', src='/javascripts/content.js')
 script(type='text/javascript', src='/javascripts/teacher.js')
 script(type='text/javascript', src='/javascripts/scr.js')
 
-span.rightPart.blueBox Time left: 
+span.rightPart.blueBox Time left:
 	progress#countDownProgress(value='100', max='100')
 	span.smallFont#countDown
 
 span.leftPart
 	input#toggleTerrain(type='button', class='button', name='terrain', value='Terrain ON/OFF', onclick='VFT.lahar.teacher.buttons.setTerrain()')
 	span.blueBox Map transparency
-			input#mapTransparency(type='range', min='0', max='100', value='100', onchange='VFT.lahar.opacity(this.value/100)', title='Set map transparency')
+			input#mapTransparency(type='range', min='1', max='100', value='100', onchange='VFT.lahar.opacity(this.value/100)', title='Set map transparency')
 
 
 	input#startExercise(type='button', class='button', name='start', value='Start', onclick='VFT.lahar.teacher.buttons.start()')

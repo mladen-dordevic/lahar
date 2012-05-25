@@ -32,6 +32,7 @@ VFT.lahar.student = (function(){
 		var countDown = function(){
 			$('countDown').innerHTML = time.toString();
 			$('countDownProgress').max = time.toString();
+			$('countDownProgress').value = time.toString();
 			clearInterval(interval);
 			var timer = function(){
 				var timeLocal = $('countDown').innerHTML *1;

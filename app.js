@@ -5,7 +5,8 @@ var express = require('express'),
 	users = require('./users');
 
 var app = express.createServer(),
-	io = require('socket.io').listen(app);
+	io = require('socket.io').listen(app),
+	history = require('./history');
 
 // Configuration
 io.set('log level', 1);                    // reduce logging
@@ -19,7 +20,6 @@ app.configure(function(){
 	app.use(express.cookieParser());
 	app.use(express.session({ secret: 'your secret here' }));
 	app.use(express.static(__dirname + '/public'));
-	app.use(express.static(__dirname + '/.git'));
 	app.use(express.favicon(__dirname +  '/public/icons/favicon.ico', { maxAge: 2592000000 }));
 });
 
@@ -234,7 +234,20 @@ io.sockets.on('connection', function (socket) {
 		*/
 		socket.user = data;
 		socket.emit('message',{name:'SERVER',text:'welcome '+ data.firstName +'!'});
-		//console.log('Socket joinning ', data.key);
+
+		/*retreiving history*/
+		var mess = history.get('message', socket.user.key),
+			acc = history.get('activity', socket.user.key),
+			ter = history.get('terrain', socket.user.key);
+		if(mess){
+			socket.emit('message',mess);
+		};
+		if(acc){
+			socket.emit('start excersize',acc);
+		};
+		if(ter == 'off'){
+			socket.emit('disable terrain');
+		};
 		socket.join(data.key);
 		if(socket.user){
 			var send = {
@@ -242,34 +255,40 @@ io.sockets.on('connection', function (socket) {
 				text: socket.user.firstName+' joined the exercise!'
 			}
 			socket.broadcast.to(socket.user.key).emit('message',send);
-			console.log(socket.user.firstName+' logged in ',new Date());
+			console.log(socket.user.firstName+' logged in ',new Date()+' IP:',socket.handshake.address.address);
 		}
 	});
 	socket.on('message',function(data){
-		//console.log('Brodcasting to', socket.user.key);
 		if(socket.user){
 			var send = {
 				name : socket.user.firstName,
 				text : data
 			};
+			history.set('message', socket.user.key, send);
 			socket.broadcast.to(socket.user.key).emit('message',send);
 		}
 	});
 	socket.on('start excersize', function(data){
-		if(socket.user)
+		if(socket.user){
+			history.set('activity', socket.user.key, data);
 			socket.broadcast.to(socket.user.key).emit('start excersize',data);
+		}
 	});
 	socket.on('stop excersize', function(){
 		if(socket.user)
 			socket.broadcast.to(socket.user.key).emit('stop excersize');
 	});
 	socket.on('enable terrain',function(){
-		if(socket.user)
+		if(socket.user){
+			history.set('terrain', socket.user.key, 'on');
 			socket.broadcast.to(socket.user.key).emit('enable terrain');
+		}
 	});
 	socket.on('disable terrain',function(){
-		if(socket.user)
+		if(socket.user){
+			history.set('terrain', socket.user.key, 'off');
 			socket.broadcast.to(socket.user.key).emit('disable terrain');
+		}
 	});
 	socket.on('disconnect', function () {
 		if(socket.user){
