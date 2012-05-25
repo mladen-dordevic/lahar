@@ -1,8 +1,6 @@
-
 /**
 * Module dependencies.
 */
-
 var express = require('express'),
 	users = require('./users');
 
@@ -21,6 +19,7 @@ app.configure(function(){
 	app.use(express.cookieParser());
 	app.use(express.session({ secret: 'your secret here' }));
 	app.use(express.static(__dirname + '/public'));
+	app.use(express.favicon(__dirname +  '/public/icons/favicon.ico', { maxAge: 2592000000 }));
 });
 
 app.configure('development', function(){
@@ -29,6 +28,7 @@ app.configure('development', function(){
 
 app.configure('production', function(){
 	app.use(express.errorHandler());
+	app.use(express.static(__dirname + '/public', { maxAge: 2592000000 }));
 });
 
 app.dynamicHelpers({
@@ -40,21 +40,47 @@ app.dynamicHelpers({
 	}
 });
 
-function requireLogin(req, res, next){
+function redir(req, res){
+	console.log(res.Location)
 	if(req.session.user){
-	//	if('/' +req.session.user.rolle == req.url)
-			next();
-	//	else if(req.url == '/logout')
-	//		next();
-	//	else{
-	//		res.redirect('/' + req.session.user.rolle);
-	//		req.flash('warning', 'You dont have acces for '+req.url);
-	//	}
+		switch (req.session.user.level){
+			case 0:
+				res.redirect('/admin',403 );
+				break;
+			case 1:
+				res.redirect('/teacher',403 );
+				break;
+			case 2:
+				res.redirect('/student',403 );
+				break;
+		}
 	}
 	else{
 		res.redirect('/');
-	}
+	};
 }
+
+function requireLogin0(req, res, next){
+	if(req.session.user && req.session.user.level == 0)
+		next();
+	else{
+		redir(req, res);
+	}
+};
+function requireLogin1(req, res, next){
+	if(req.session.user && req.session.user.level == 1)
+		next();
+	else{
+		redir(req, res);
+	}
+};
+function requireLogin2(req, res, next){
+	if(req.session.user && req.session.user.level == 2)
+		next();
+	else{
+		redir(req, res);
+	}
+};
 
 // Routes
 app.get('/', function(req, res){
@@ -116,6 +142,9 @@ app.post('/new/teacher/submit',function(req,res){
 app.get('/new/teacher', function(req,res){
 	res.render('new/teacher');
 });
+app.get('/new/retrieve', function(req,res){
+	res.render('new/retrieve');
+});
 
 app.post('/new/teacher',function(req,res){
 	/*check if database has appropriate id for the teacher
@@ -157,34 +186,34 @@ app.post('/', function(req, res){
 	})
 })
 
-app.get('/admin', requireLogin, function(req, res){
+app.get('/admin', requireLogin0, function(req, res){
 	res.render('admin');
 });
 
-app.get('/teacher',requireLogin, function(req, res){
+app.get('/teacher',requireLogin1, function(req, res){
 	res.render('teacher');
 });
-app.get('/teacher/manage',requireLogin, function(req, res){
+app.get('/teacher/manage',requireLogin1, function(req, res){
 	res.render('teacher/manage');
 });
 
-app.get('/teacher/lahar',requireLogin, function(req, res){
+app.get('/teacher/lahar',requireLogin1, function(req, res){
 	res.render('teacher/lahar');
 });
-app.get('/student',requireLogin, function(req, res){
+app.get('/student',requireLogin2, function(req, res){
 	res.render('student');
 });
-app.get('/logout',requireLogin, function(req, res){
+app.get('/logout', function(req, res){
 	delete req.session.user;
 	res.redirect('/');
 });
-app.get('/copyright', function(req, res){
+app.get('/legal/copyright', function(req, res){
 	res.render('legal/copyright');
 });
-app.get('/terms', function(req, res){
+app.get('/legal/terms', function(req, res){
 	res.render('legal/terms');
 });
-app.get('/privacy', function(req, res){
+app.get('/legal/privacy', function(req, res){
 	res.render('legal/privacy');
 });
 
@@ -203,9 +232,17 @@ io.sockets.on('connection', function (socket) {
 		socket.join(name of the group);
 		*/
 		socket.user = data;
-		socket.emit('message',{name:'server',text:'welcome '+ data.firstName +'!'});
+		socket.emit('message',{name:'SERVER',text:'welcome '+ data.firstName +'!'});
 		//console.log('Socket joinning ', data.key);
 		socket.join(data.key);
+		if(socket.user){
+			var send = {
+				name: 'SERVER',
+				text: socket.user.firstName+' joined the exercise!'
+			}
+			socket.broadcast.to(socket.user.key).emit('message',send);
+			console.log(socket.user.firstName+' logged in ',new Date());
+		}
 	});
 	socket.on('message',function(data){
 		//console.log('Brodcasting to', socket.user.key);

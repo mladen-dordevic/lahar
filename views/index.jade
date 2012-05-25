@@ -1,19 +1,16 @@
 
 #logingIn
-	p
-		h3 Please log in
+	h3 Please log in
 	form(action='/', method='POST')
 		p
-			label(for='login') Email:
-		p
+			label(for='login') Email:</br>
 			input(type='text', name='username', id='username')
 		p
 			label(for='password') Password:
-		p
 			input(type='password', name='password', id='password')
 		p
 			input(type='submit')
-	p
-		.smallFont
-			a(href='/new', font(size='.1em')) New Account |
-			a(href='terms/') Forgot Password
+
+	#helpMe.blueBox
+		a(href='/new', font(size='.1em')) New Account |
+		a(href='new/retrieve') Forgot Password

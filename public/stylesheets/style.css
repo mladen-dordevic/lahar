@@ -1,7 +1,7 @@
 body {
-  margin: 0px auto;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-  background-color: #FFFFCC;
+	margin: 0px auto;
+	font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+	background-color: #FFFFCC;
 
 	-webkit-background-size: 5px 5px;
 	-moz-background-size: 5px 5px;
@@ -81,17 +81,6 @@ body {
 	height: 60%;
 	width: 100%;
 }
-#footer{
-	background-color: #DDFFFF;
-	position: absolute;
-	bottom: 0px;
-	border-top:1px solid #CCCCCC;
-	width: 100%;
-	height: auto;
-	font-size:10px;
-	margin-top: .2em;
-	text-align:center;
-}
 #container {
 	border-top: 3px double #33CCFF;
 	min-width: 1px;
@@ -99,9 +88,16 @@ body {
 	padding-left:1em;
 }
 #logingIn{
-	z-index: 100;
 	width: 200px;
 	height : 250px;
+	margin: 0em auto;
+	margin-top:10%;
+	position:relative;
+	background-color:#FC0;
+	border: 1px solid #999999;
+	padding: 3px;
+}
+#logingIn.p{
 	margin: 0em auto;
 	margin-top:10%;
 	position:relative;
@@ -124,10 +120,18 @@ body {
 	background: -webkit-linear-gradient(right, #000000  3%, #808080  4%, #FFFFFF  100%);
     height:7px;
 }
+#helpMe{
+	position: absolute;
+	bottom: 0px;
+	left: 0px;
+	font: 11px Arial;
+	margin-left:20px;
+}
 
 .box{
 	display: block;
 	border: 1px solid #999999;
+	background-color:#FC0;
 	margin:20px;
 	padding : 20px;
 	text-align:center;
@@ -237,10 +241,9 @@ p.footer{
 	width: 100%;
 	height: auto;
 	font-size:10px;
-	margin-top: .2em;
 	text-align:center;
 	width:100%;
-	padding: 7px 0;
+	padding: 3px;
 	background-image: -webkit-linear-gradient(top, #DDFFFF, #66CCFF);
 	background-image:    -moz-linear-gradient(top, #DDFFFF, #66CCFF);
 	background-image:     -ms-linear-gradient(top, #DDFFFF, #66CCFF);

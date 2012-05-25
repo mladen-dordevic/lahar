@@ -22,7 +22,7 @@ VFT.lahar.student = (function(){
 		else{
 			$('legendImage').removeChild($('legendImage').childNodes[0]);
 			var frame = $('legend')
-			frame.style.height = '1.4em';
+			frame.style.height = '1.47em';
 			frame.style.width = '1.6em';
 			$('legendButton').value = '+';
 			legendOn = false;

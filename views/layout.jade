@@ -14,6 +14,8 @@ html
 						#level(style='display:none', value=session.user.level)#{session.user.level}
 						#key(style='display:none', value=session.user.key)#{session.user.key}
 						a(href='/logout') Sign Out
+					- else
+						a(href='/') Sign In
 
 			.notifications
 				- if(flash.warning)
@@ -26,6 +28,6 @@ html
 		#footer
 			p.footer Lahar exercise Copyright © 2012 ODU team. All rights reserved.
 			p.footer
-				a(href='copyright') Copyright/IP Policy  |
-				a(href='terms') Terms of Service  |
-				a(href='privacy') Privacy Policy
+				a(href='../legal/copyright') Copyright/IP Policy  |&nbsp
+				a(href='../legal/terms') Terms of Service  |&nbsp
+				a(href='../legal/privacy') Privacy Policy
