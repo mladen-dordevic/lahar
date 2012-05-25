@@ -248,7 +248,9 @@ io.sockets.on('connection', function (socket) {
 		if(ter == 'off'){
 			socket.emit('disable terrain');
 		};
-		socket.join(data.key);
+		if(socket.user.level == 1){
+			history.set('teacher', socket.user.key, socket)
+		}
 		if(socket.user){
 			var send = {
 				name: 'SERVER',
@@ -257,6 +259,8 @@ io.sockets.on('connection', function (socket) {
 			socket.broadcast.to(socket.user.key).emit('message',send);
 			console.log(socket.user.firstName+' logged in ',new Date()+' IP:',socket.handshake.address.address);
 		}
+
+		socket.join(socket.user.key);
 	});
 	socket.on('message',function(data){
 		if(socket.user){
@@ -290,10 +294,23 @@ io.sockets.on('connection', function (socket) {
 			socket.broadcast.to(socket.user.key).emit('disable terrain');
 		}
 	});
+	socket.on('evacuate',function(data){
+		var teacher = history.get('teacher',socket.user.key);
+		if(teacher){
+			var send = {
+				name: 'SERVER',
+				text: socket.user.firstName+' '+ socket.user.lastName+' voted: '+data
+			}
+			teacher.emit('message',send);
+		}
+	});
 	socket.on('disconnect', function () {
 		if(socket.user){
 			var user = socket.user;
-			console.log(user.email + ' Disconnected ' + new Date() );
+			console.log(user.firstName + ' Disconnected ' + new Date() );
+			if(user.level = 1){
+				history.set('teacher', user.key, null)
+			}
 			socket.leave(user.key);
 			delete socket.user;
 		}

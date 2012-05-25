@@ -1,11 +1,13 @@
 VFT.lahar = {};
 
 VFT.lahar.student = (function(){
-	var socket = VFT.helpers.socket;
-	var interval = null;
-	var legendOn = false;
-	var reset = function(){$('countDown').innerHTML = ''};
-	var legend = function(){
+	var socket = VFT.helpers.socket,
+	notify = VFT.util.notification,
+	interval = null,
+	legendOn = false,
+	voted = false,
+	reset = function(){$('countDown').innerHTML = ''},
+	legend = function(){
 		if(!legendOn){
 			var oImg = document.createElement("img");
 			oImg.setAttribute('src', VFT.util.qualifyURL('../images/legend.png'));
@@ -27,8 +29,8 @@ VFT.lahar.student = (function(){
 			$('legendButton').value = '+';
 			legendOn = false;
 		};
-	};
-	var start = function(time){
+	},
+	start = function(time){
 		var countDown = function(){
 			$('countDown').innerHTML = time.toString();
 			$('countDownProgress').max = time.toString();
@@ -51,10 +53,35 @@ VFT.lahar.student = (function(){
 			interval = setInterval(timer,1000);
 		};
 		countDown();
-	}
-	var stop = function(){
+	},
+	stop = function(){
 		clearInterval(interval);
 		$('countDown').innerHTML = 'STOPPED';
+	},
+	evacuate = function(param){
+		if(!voted){
+			voted = true;
+			if(param){
+				if(confirm('Are you shoure you want to evacuate?\n Fasla evacuation could cost milions!\nEvacuate?')){
+					socket.emit('evacuate','EVACUATE!');
+					voted = true;
+					//should stop counter and clear the placemark
+					return;
+				}
+				return;
+			}
+			else{
+				if(confirm('Are you shoure you want to stay?!\nStay?')){
+					socket.emit('evacuate','STAY!');
+					//should stop counter and clear the placemark
+					return;
+				}
+				return;
+			}
+		}
+		else{
+			notify.add('You alredy submited your vote!',1,10);
+		}
 	}
 	return {
 		events :{
@@ -62,7 +89,8 @@ VFT.lahar.student = (function(){
 			stop : stop
 		},
 		button:{
-			legend:legend
+			legend:legend,
+			evacuate:evacuate
 		}
 	}
 })();

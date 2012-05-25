@@ -4,6 +4,7 @@ var HISTORY_SIZE = 20;
 module.exports.set = function(task, group, content){
 	if(!history[group]){
 		history[group] = {
+			teacher :null,
 			message : [],
 			activity : null,
 			terrain : 'on'
@@ -28,10 +29,13 @@ module.exports.set = function(task, group, content){
 		case 'terrain':
 			history[group][task] = content;
 			break;
+		case 'teacher':
+			history[group][task] = content;
+			break;
 	};
 };
-module.exports.get = function(task, group){	
-	if(history[group] && history[group][task]){		
+module.exports.get = function(task, group){
+	if(history[group] && history[group][task]){
 		var curent = history[group][task];
 		switch(task){
 			case 'message':
@@ -39,18 +43,20 @@ module.exports.get = function(task, group){
 				break;
 			case 'activity':
 				var get = new Date().getTime(),
-					reamin = Math.floor(((curent.set + (curent.time * 1000)) - get)/1000);				
+					reamin = Math.floor(((curent.set + (curent.time * 1000)) - get)/1000);
 				if(reamin > 0){
 					curent.time = reamin;
 					return curent;
 				};
 				return null;
 				break;
-
 			case 'terrain':
 				return curent
 				break;
+			case 'teacher':
+				return curent
+				break;
 		};
-	}	
+	}
 	return null;
 }

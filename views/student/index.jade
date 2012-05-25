@@ -9,8 +9,8 @@ span.rightPart.blueBox Time left:&nbsp
 	span.smallFont#countDown
 
 span.leftPart
-	input#evacuateCity(type='button', class='button', name='Evacuate', value='Evacuate')
-	input#stayInCity(type='button',class='button', name='Stay', value='Stay')
+	input#evacuateCity(type='button', class='button', name='Evacuate', value='Evacuate', onclick='VFT.lahar.student.button.evacuate(true)')
+	input#stayInCity(type='button',class='button', name='Stay', value='Stay', onclick='VFT.lahar.student.button.evacuate(false)')
 	span.blueBox Map transparency&nbsp
 		input#mapTransparency(type='range', min='1', max='100', value='100', onchange='VFT.lahar.opacity(this.value/100)', title='Set map transparency')
 
