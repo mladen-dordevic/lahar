@@ -3,7 +3,14 @@ body {
 	font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 	background-color: #FFFFCC;
 
-	-webkit-background-size: 5px 5px;
+
+
+	background-size: 100%;
+	background-repeat: no-repeat;
+	background-image: url('/images/bground.jpg');
+
+
+	/*-webkit-background-size: 5px 5px;
 	-moz-background-size: 5px 5px;
 	background-size: 5px 5px;
 
@@ -14,10 +21,11 @@ body {
 	background-image: -o-linear-gradient(left, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.1) 50%, transparent 50%, transparent 100%);
 	background-image: -ms-linear-gradient(left, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.1) 50%, transparent 50%, transparent 100%);
 	background-image: linear-gradient(left, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.1) 50%, transparent 50%, transparent 100%);
+	*/
 }
 #header {
 	margin: 3px;
-	height: 1.3em;
+	height: 1.6em;
 }
 #mainHeader{
 	margin: 0px auto;
@@ -40,11 +48,12 @@ body {
 }
 #chatBox{
 	border: 4px inset  #CCCCCC;
-	background-color:#CCFFCC;
+	background-color:#CCFFFF;
 	height: 110px;
-	width: 97%;
+	width: 99%;
 	overflow: auto;
 	padding-left: .5em;
+	opacity:0.8;
 }
 #message{
 	border: 1px outset #999999;
@@ -53,6 +62,7 @@ body {
 	float:left;
 	padding: 2px;
 	margin-top: 3px ;
+	opacity:0.8;
 }
 #chatSend:hover {
 	background: #666666;
@@ -96,6 +106,7 @@ body {
 	background-color:#FC0;
 	border: 1px solid #999999;
 	padding: 3px;
+	opacity:0.8;
 }
 #logingIn.p{
 	margin: 0em auto;
@@ -117,7 +128,7 @@ body {
 #mapTransparency{
 	-webkit-appearance: none !important;
 	background-color: #00CC33;
-	background: -webkit-linear-gradient(right, #000000  3%, #808080  4%, #FFFFFF  100%);
+	background: -webkit-linear-gradient(left, white, black);
     height:7px;
 }
 #helpMe{
@@ -129,6 +140,7 @@ body {
 }
 
 .box{
+	opacity:0.7;
 	display: block;
 	border: 1px solid #999999;
 	background-color:#FC0;
@@ -192,6 +204,7 @@ p.footer{
 	margin-left:.5em;
 	border: 1px outset #999999;
 	background-color:#CCFFFF;
+	opacity:0.7;
 }
 .leftSpacer{
 	margin-left: .5em;
@@ -236,6 +249,7 @@ p.footer{
 }
 /* Sticky message */
 #footer{
+	opacity:0.9;
 	position:fixed;
 	bottom: 0px;
 	width: 100%;
@@ -252,4 +266,8 @@ p.footer{
 	-webkit-box-shadow: 0px 0px 3px rgba(0,0,0,0.3);
 	-moz-box-shadow:    0px 0px 3px rgba(0,0,0,0.3);
 	box-shadow:         0px 0px 3px rgba(0,0,0,0.3);
+}
+.traBlue{
+	opacity:0.8;
+	background-color=#CCFFFF;
 }

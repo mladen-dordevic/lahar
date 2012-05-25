@@ -13,9 +13,11 @@ html
 						#email(style='display:none', value=session.user.email)#{session.user.email}
 						#level(style='display:none', value=session.user.level)#{session.user.level}
 						#key(style='display:none', value=session.user.key)#{session.user.key}
-						a(href='/logout') Sign Out
+						.blueBox
+							a(href='/logout') Sign Out
 					- else
-						a(href='/') Sign In
+						.blueBox
+							a(href='/') Sign In
 
 			.notifications
 				- if(flash.warning)

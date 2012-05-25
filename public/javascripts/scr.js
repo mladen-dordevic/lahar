@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded",function(){
 				ge = instance;
 				ge.getWindow().setVisibility(true);
 				ge.getOptions().setFlyToSpeed(ge.SPEED_TELEPORT);
-				ge.getLayerRoot().enableLayerById(ge.LAYER_BORDERS, true);
+				//ge.getLayerRoot().enableLayerById(ge.LAYER_BORDERS, true);
 				VFT.server = {
 					firstName : $('name').innerHTML,
 					lastName : $('lastName').innerHTML,
@@ -36,8 +36,9 @@ document.addEventListener("DOMContentLoaded",function(){
 					ge.getView().setAbstractView(lookAt);
 				}
 
-				map.NE.setPoint(47.3422,-121.492,0);
-				map.SW.setPoint(46.4572,-122.475,0);
+				map.NE.setPoint(47.35797701491091,-121.4945921360257,0);
+				map.SW.setPoint(46.44875183380029,-122.4844805354742,0);
+				map.rotation = -0.4480951474680683
 				map.imageHref = VFT.util.qualifyURL('../images/map.png');
 				map.setGroundOverlay();
 				VFT.lahar.resetView();
