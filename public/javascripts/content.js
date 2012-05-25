@@ -410,12 +410,12 @@ VFT.util = {
 				var style = document.createElement('style');
 				style.type = 'text/css';
 				style.innerHTML = '.notifications{'+
-										'width: 99.5%;'+
+										'width: 100%;'+
 										'border-top:1px solid #CCCCCC;'+
 										'font-size:12px;'+
 										'margin:0px auto;'+
 										'text-align:center;'+
-										'position: absolute;'+
+										'position: fixed;'+
 										'bottom: 0px;'+
 									'}';
 				document.getElementsByTagName('head')[0].appendChild(style);

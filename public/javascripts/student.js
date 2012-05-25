@@ -5,7 +5,7 @@ VFT.lahar.student = (function(){
 	notify = VFT.util.notification,
 	interval = null,
 	legendOn = false,
-	voted = false,
+	voted = true,
 	reset = function(){$('countDown').innerHTML = ''},
 	legend = function(){
 		if(!legendOn){
@@ -31,6 +31,7 @@ VFT.lahar.student = (function(){
 		};
 	},
 	start = function(time){
+		voted = false;
 		var countDown = function(){
 			$('countDown').innerHTML = time.toString();
 			$('countDownProgress').max = time.toString();
@@ -55,29 +56,35 @@ VFT.lahar.student = (function(){
 		countDown();
 	},
 	stop = function(){
+		voted = true;
 		clearInterval(interval);
 		$('countDown').innerHTML = 'STOPPED';
+		$('countDownProgress').max = '1';
+		$('countDownProgress').value = '1';
 	},
 	evacuate = function(param){
 		if(!voted){
-			voted = true;
 			if(param){
 				if(confirm('Are you shoure you want to evacuate?\n Fasla evacuation could cost milions!\nEvacuate?')){
 					socket.emit('evacuate','EVACUATE!');
 					voted = true;
-					//should stop counter and clear the placemark
+				}
+				else{
 					return;
 				}
-				return;
 			}
 			else{
 				if(confirm('Are you shoure you want to stay?!\nStay?')){
 					socket.emit('evacuate','STAY!');
-					//should stop counter and clear the placemark
+					voted = true;
+				}
+				else{
 					return;
 				}
-				return;
 			}
+			VFT.lahar.marker.removePlacemark();
+			stop();
+			$('countDown').innerHTML = 'DONE!';
 		}
 		else{
 			notify.add('You alredy submited your vote!',1,10);
