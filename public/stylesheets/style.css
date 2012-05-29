@@ -3,19 +3,15 @@ body {
 	font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 	background-color: #FFFFCC;
 
-
-
 	background-size: 100%;
 	background-repeat: no-repeat;
 	background-image: url('/images/bground.jpg');
-
 
 	/*-webkit-background-size: 5px 5px;
 	-moz-background-size: 5px 5px;
 	background-size: 5px 5px;
 
 	background-image: -webkit-linear-gradient(left, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.1) 50%, transparent 50%, transparent 100%);
-
 
 	background-image: -moz-linear-gradient(left, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.1) 50%, transparent 50%, transparent 100%);
 	background-image: -o-linear-gradient(left, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.1) 50%, transparent 50%, transparent 100%);
@@ -24,7 +20,7 @@ body {
 	*/
 }
 #header {
-	margin: 3px;
+	margin-bottom: 3px;
 	height: 1.6em;
 }
 #mainHeader{
@@ -32,6 +28,7 @@ body {
 }
 #usersSection{
 	float:right;
+	margin-right:0.5em;
 }
 #aboveMap{
 	height:1.5em;
@@ -54,6 +51,7 @@ body {
 	overflow: auto;
 	padding-left: .5em;
 	opacity:0.8;
+	resize: vertical;
 }
 #message{
 	border: 1px outset #999999;
@@ -96,6 +94,7 @@ body {
 	min-width: 1px;
 	padding-right:1em;
 	padding-left:1em;
+	padding-top:3px;
 }
 #logingIn{
 	width: 170px;
@@ -107,6 +106,9 @@ body {
 	border: 1px solid #999999;
 	padding: 3px;
 	opacity:0.8;
+	-webkit-border-radius: 12px;
+	-moz-border-radius: 12px;
+	border-radius: 12px;
 }
 #logingIn.p{
 	margin: 0em auto;
@@ -147,12 +149,16 @@ body {
 	margin:20px;
 	padding : 20px;
 	text-align:center;
+	-webkit-border-radius: 12px;
+	-moz-border-radius: 12px;
+	border-radius: 12px;
 }
 .notifications{
 	width: 100%;
 	font-size:12px;
 	margin:0px auto;
 	text-align:center;
+	font-weight:bold;
 }
 .warning{
 	display: block;
@@ -161,6 +167,7 @@ body {
 	margin:0px auto;
 	padding-top:0.2em;
 	padding-bottom:0.2em;
+	font-weight:bold;
 }
 .alert{
 	display: block;
@@ -169,6 +176,7 @@ body {
 	margin:0px auto;
 	padding-top:0.2em;
 	padding-bottom:0.2em;
+	font-weight:bold;
 }
 .info{
 	display: block;
@@ -180,7 +188,7 @@ body {
 }
 .inputAlined{
 	margin: 0em auto;
-	background-color:#FFFFFF;
+	background-color:#FC0;
 	padding: 3px;
 }
 .rightPart{
@@ -198,7 +206,6 @@ p.footer{
 }
 .blueBox{
 	padding:2px;
-	float:right;
 	margin-top:.2em;
 	margin-bottom:.2em;
 	margin-left:.5em;
@@ -270,4 +277,17 @@ p.footer{
 .traBlue{
 	opacity:0.8;
 	background-color=#CCFFFF;
+}
+a:link {
+	color:#000000;
+	font-weight:lighter;
+
+}
+a:visited{
+	color:#000000;
+}
+a:hover{
+	color:white;
+	background-color:black;
+	font-weight:lighter;
 }

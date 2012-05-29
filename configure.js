@@ -102,3 +102,20 @@ client.query(
 		}
 	}
 );
+client.query(
+	'CREATE TABLE IF NOT EXISTS feedback('+
+	'f_id INT(11) NOT NULL AUTO_INCREMENT,'+
+	'email VARCHAR(45),'+
+	'feedback_description TEXT,'+
+	'feedback_created TIMESTAMP,'+
+	'PRIMARY KEY (f_id))',
+	function(err){
+		if(err){
+			console.log('Error while creating table feedback' );
+			return;
+		}
+		else{
+			console.log('Table feedback succesfully created!');
+		}
+	}
+);

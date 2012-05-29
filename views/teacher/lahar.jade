@@ -13,9 +13,9 @@ span.leftPart
 	span.blueBox Map transparency
 		input#mapTransparency(type='range', min='1', max='100', value='100', onchange='VFT.lahar.opacity(this.value/100)', title='Set map transparency')
 
-
+span.leftSpacer
 	input#startExercise(type='button', class='button', name='start', value='Start', onclick='VFT.lahar.teacher.buttons.start()')
-	input#timeAvailable(type='text',class='traBlue', placeholder='Time in minutes...')
+	input#timeAvailable(type='text',class='traBlue',size='12', placeholder='Time in minutes...')
 	input#stopExercise(type='button', name='stop', class='button', value='Stop', onclick='VFT.lahar.teacher.buttons.stop()')
 
 #map3d

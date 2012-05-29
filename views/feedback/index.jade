@@ -1,0 +1,9 @@
+.box
+	h3 Please tell us how are we doing!
+	p 
+		form(action='/feedback/index', method='POST')
+			.inputAlined 
+				input(type='email', name='email', id='email', placeholder='Full valid email address...')
+			.inputAlined 
+				textarea(rows='5', cols='30', name='description', id='description', placeholder='How can we make it better...?')						
+			input(type='submit', class='button')

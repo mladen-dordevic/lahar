@@ -1,10 +1,11 @@
-
 #logingIn
 	h3 Please log in
 	form(action='/', method='POST')
 		p
 			label(for='login') Email:</br>
 			input(type='text', name='username', id='username', style='width:95%; margine: 3px')
+			script
+				document.getElementById('username').focus()
 		p
 			label(for='password') Password:</br>
 			input(type='password', name='password',style='width:95%; margine: 3px', id='password')
@@ -12,5 +13,6 @@
 			input(type='submit', class='button', style='float:right')
 
 	#helpMe.blueBox
-		a(href='/new') New Account |&nbsp
+		a(href='/new') New Account
+		| &nbsp
 		a(href='new/retrieve') Forgot Password

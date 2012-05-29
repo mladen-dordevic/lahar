@@ -4,6 +4,15 @@ html
 		title Lahar
 		link(rel='stylesheet', href='/stylesheets/style.css')
 	body
+		script
+			document.body.style.backgroundSize=document.width+'px '+document.height+'px';
+			window.onresize = function(){
+				document.body.style.backgroundSize=document.width+'px '+document.height+'px'
+			};
+			window.onload = function(){
+				//setInterval(function(){document.body.style.backgroundImage = 'url(/images/bground.jpg)'},60000)
+
+			};
 		#header
 			#mainHeader
 				#usersSection
@@ -18,18 +27,26 @@ html
 					- else
 						.blueBox
 							a(href='/') Sign In
+			.blueBox.leftPart
+				a(href='/feedback') +Feedback
 
-			.notifications
+			#notify.notifications
 				- if(flash.warning)
 						.warning #{flash.warning}
 				- if(flash.alert)
 						.alert #{flash.alert}
 				- if(flash.info)
 						.info #{flash.info}
+				- if(flash.warning || flash.alert || flash.info)
+					script
+						setTimeout("document.getElementById('notify').removeChild(document.getElementById('notify').firstChild)",10000)
+
 		#container!= body
 		#footer
 			p.footer Lahar exercise Copyright © 2012 ODU team. All rights reserved.
 			p.footer
-				a(href='../legal/copyright') Copyright/IP Policy  |&nbsp
-				a(href='../legal/terms') Terms of Service  |&nbsp
+				a(href='../legal/copyright') Copyright/IP Policy
+				|&nbsp
+				a(href='../legal/terms') Terms of Service
+				|&nbsp
 				a(href='../legal/privacy') Privacy Policy

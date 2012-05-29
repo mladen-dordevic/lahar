@@ -1,20 +1,20 @@
 .box
-	h3 Account informations details for #{id}
+	h3 Account informations details for #{accountId}
 	p Please fill in all the fields
-	p 
+	p
 		form(action='/new/teacher/submit', method='POST')
-			.inputAlined 
-				input(type='email', name='emial', id='email', placeholder='Full valid email address...')
-			.inputAlined 
-				input(type='email', name='verifyEmial', id='verifyEmial', placeholder='Retype email address...')
-			.inputAlined 
+			.inputAlined
+				input(type='email', name='email', id='email', placeholder='Full valid email address...', value='#{email}')
+			.inputAlined
+				input(type='email', name='verifyEmail', id='verifyEmail', placeholder='Retype email address...', value='#{email}')
+			.inputAlined
 				input(type='password', name='password', id='password', placeholder='Enter password...')
-			.inputAlined 
+			.inputAlined
 				input(type='password', name='verifyPassword', id='verifyPassword', placeholder='Confirm password...')
-			.inputAlined 
+			.inputAlined
 				input(type='text', name='firstName', id='firstName', placeholder='First name...')
-			.inputAlined 
+			.inputAlined
 				input(type='text', name='lastName', id='lastName', placeholder='Last name...')
-			.inputAlined 
+			.inputAlined
 				input(type='text', name='schoolName', id='schoolName', placeholder='Institution name...')
-			input(type='submit')
+			input(type='submit', class='button')

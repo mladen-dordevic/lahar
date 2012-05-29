@@ -69,7 +69,7 @@ VFT.helpers.sendMessage = function(){
 	$('message').value = "";
 	$('message').focus();
 	var now = new Date;
-	var con = '<font size="1" face="Arial Narrow" color="grey">' + now.toTime() + '</font>'+ '\t<b>me</b> :'+ data;
+	var con = '<font size="1" face="Arial Narrow" color="grey">' + now.toTime() + '</font>'+ '\t<b>me: </b>'+ data;
 	VFT.helpers.appendMessage('chatBox',con);
 }
 
@@ -89,7 +89,7 @@ VFT.helpers.socket.on('initiate',function(user){
 VFT.helpers.socket.on('message',function(data){
 	var process = function(data){
 		var now = new Date;
-		var con = '<font size="1" face="Arial Narrow" color="grey">' + now.toTime() + '</font>'+ '\t<b>' + data.name + '</b> : '+ data.text;
+		var con = '<font size="1" face="Arial Narrow" color="grey">' + now.toTime() + '</font>'+ '\t<b>' + data.name + ':</b>  '+ data.text;
 		VFT.helpers.appendMessage('chatBox',con);
 	}
 	if(data.length>0){

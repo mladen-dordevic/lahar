@@ -81,6 +81,17 @@ function requireLogin2(req, res, next){
 		redir(req, res);
 	}
 };
+function getAccountId(req, res, next){
+	if(req.session.account){
+		next();
+	}
+	else{
+		req.flash('warning', 'To proccede tou need to enter valid key!');
+		res.render('new/teacher');
+	}
+}
+
+
 
 // Routes
 app.get('/', function(req, res){
@@ -126,17 +137,40 @@ app.post('/new/student/submit',function(req,res){
 	*/
 	//console.log(req.body.email +'   '+ req.body.password)
 });
-app.post('/new/teacher/submit',function(req,res){
-	/*check if database has appropriate id for the teacher
-	true:
-		req.session.account = {
-			teacherId: req.body.teacherId
-		};
-		res.redirect('/new/student/informations')
-	false:
-		res.render('new/student');
-	*/
-	//console.log(req.body.firstName);
+app.post('/new/teacher/submit', getAccountId, function(req, res){
+	var body = req.body;
+	if(body.email != body.verifyEmail){
+		console.log(body.email, body.verifyEmail);
+		req.flash('alert', 'You must use same email in confirm email field!');
+		res.render('new/account', {locals : {accountId: req.session.account.accountId, email : req.session.account.email }});
+		return;
+	};
+	if(body.password.length < 5){
+		req.flash('alert', 'Password needs to have at least 5 characters!');
+		res.render('new/account', {locals : {accountId: req.session.account.accountId, email : req.session.account.email }});
+		return;
+	}
+	if(body.password  != body.verifyPassword){
+		req.flash('alert', 'You must use same password in confirm password field!');
+		res.render('new/account', {locals : {accountId: req.session.account.accountId, email : req.session.account.email }});
+		return;
+	};
+	if(body.firstName == false || body.lastName == false ||body.schoolName == false){
+		req.flash('alert', 'Please fill in all the fields!');
+		res.render('new/account', {locals : {accountId: req.session.account.accountId, email : req.session.account.email }});
+		return;
+	}
+	users.setTeacher(req.session.account.accountId, body.email, body.password, body.firstName, body.lastName, body.schoolName, function(err,result){
+		if(err){
+			req.flash('alert', err);
+			res.render('new/account', {locals : {accountId: req.session.account.accountId, email : req.session.account.email }});
+			return;
+		}
+		else{
+			req.flash('info', result);
+			res.render('index', {locals : {accountId: req.session.account.accountId, email : req.session.account.email }});
+		}
+	});
 });
 
 
@@ -147,21 +181,22 @@ app.get('/new/retrieve', function(req,res){
 	res.render('new/retrieve');
 });
 
-app.post('/new/teacher',function(req,res){
-	/*check if database has appropriate id for the teacher
-	true:
-		req.session.account = {
-			account: req.body.accountId
+app.post('/new/teacher/key',function(req,res){
+	users.getTeacherKey(req.body.accountId,function(err,result){
+		if(err){
+			console.log('Teacher trying to submit key: '+req.body.accountId+'  Error from the database: '+err );
+			req.flash('warning', 'Key faild, it is eather activated or it does not existe!');
+			res.render('new/teacher');
+		}
+		else if(result){
+			req.session.account = {
+				accountId: req.body.accountId,
+				email: result,
+				level : 1
+			};
+			res.render('new/account', {locals : {accountId: req.body.accountId, email : result }});
 		};
-
-	false:
-		res.render('new/student');
-	*/
-
-		req.session.account = {
-			accountId: req.body.accountId
-		};
-		res.render('new/account', {locals : {id: req.body.accountId}});
+	});
 });
 
 app.post('/', function(req, res){
@@ -217,7 +252,14 @@ app.get('/legal/terms', function(req, res){
 app.get('/legal/privacy', function(req, res){
 	res.render('legal/privacy');
 });
-
+app.get('/feedback', function(req, res){
+	res.render('feedback');
+});
+app.post('/feedback/index', function(req, res){
+	users.setFeetback(req.body.email,	req.body.description);
+	req.flash('info', 'Thank you for your feedback.');
+	res.render('index');
+});
 app.get('*', function(req, res){
 	res.render('404')
 });
