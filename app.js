@@ -86,8 +86,8 @@ function getAccountId(req, res, next){
 		next();
 	}
 	else{
-		req.flash('warning', 'To proccede tou need to enter valid key!');
-		res.render('new/teacher');
+		req.flash('warning', 'To proccede you need to enter valid key!');
+		res.render('new');
 	}
 }
 
@@ -111,36 +111,60 @@ app.get('/new/student', function(req,res){
 });
 
 app.post('/new/student',function(req,res){
-	/*check if database has appropriate id for the teacher
-	true:
-		req.session.account = {
-			teacherId: req.body.teacherId
-		};
-		res.redirect('/new/student/informations')
-	false:
-		res.render('new/student');
-	*/
-	req.session.account = {
-		teacherId: req.body.teacherId
-	};
-	res.render('new/informations', {locals : {id: req.body.teacherId}});
+	users.getStudentKey(req.body.teacherId,function(err, result){
+		if(err){
+			req.flash('alert', err);
+			res.render('new/student');
+			return;
+		}
+		else{
+			req.session.account = {
+				teacherId: req.body.teacherId,
+				level : 2
+			};
+			res.render('new/informations', {locals : {teacherId: req.body.teacherId}});
+		}
+	});
 });
-app.post('/new/student/submit',function(req,res){
-	/*check if database has appropriate id for the teacher
-	true:
-		req.session.account = {
-			teacherId: req.body.teacherId
-		};
-		res.redirect('/new/student/informations')
-	false:
-		res.render('new/student');
-	*/
-	//console.log(req.body.email +'   '+ req.body.password)
+app.post('/new/student/submit',getAccountId ,function(req,res){
+	var body = req.body;
+	if(body.email != body.verifyEmail){
+		req.flash('alert', 'You must use same email in confirm email field!');
+		res.render('new/informations', {locals : {teacherId: req.session.account.teacherId}});
+		return;
+	};
+	if(body.password.length < 5){
+		req.flash('alert', 'Password needs to have at least 5 characters!');
+		res.render('new/informations', {locals : {teacherId: req.session.account.teacherId}});
+		return;
+	}
+	if(body.password  != body.verifyPassword){
+		req.flash('alert', 'You must use same password in confirm password field!');
+		res.render('new/informations', {locals : {teacherId: req.session.account.teacherId}});
+		return;
+	};
+	if(body.firstName == false || body.lastName == false){
+		req.flash('alert', 'Please fill in all the fields!');
+		res.render('new/informations', {locals : {teacherId: req.session.account.teacherId}});
+		return;
+	};
+
+	users.setStudent(body.email, body.password, body.firstName, body.lastName,req.session.account.teacherId, function(err, result){
+		if(err){
+			req.flash('alert', err);
+			res.render('new/informations', {locals : {teacherId: req.session.account.teacherId}});
+			return;
+		}
+		else{
+			req.flash('info', result);
+			res.render('index');
+		}
+
+	});
 });
 app.post('/new/teacher/submit', getAccountId, function(req, res){
 	var body = req.body;
 	if(body.email != body.verifyEmail){
-		console.log(body.email, body.verifyEmail);
 		req.flash('alert', 'You must use same email in confirm email field!');
 		res.render('new/account', {locals : {accountId: req.session.account.accountId, email : req.session.account.email }});
 		return;
@@ -168,7 +192,7 @@ app.post('/new/teacher/submit', getAccountId, function(req, res){
 		}
 		else{
 			req.flash('info', result);
-			res.render('index', {locals : {accountId: req.session.account.accountId, email : req.session.account.email }});
+			res.render('index');
 		}
 	});
 });

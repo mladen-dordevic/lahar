@@ -6,15 +6,14 @@ var mysql = require('mysql'),
 // If no callback is provided, any errors will be emitted as `'error'`
 // events by the client
 client.query('USE lahar_project');
-var getId = function(username, callback){
+var getIdByUsername = function(username, callback){
 	var username = client.escape(username);
 	client.query(
 		'SELECT teacher_id FROM teacher WHERE email ='+username+' ',
 		function(err, results, fields){
-			//console.log('Getting the results from teacher table....');
 			if (err) {
 				console.log('Error while serching teacher table to get ID for ',username,err);
-				callback(err, null, null);
+				callback('Internal database error getIdByUsername 1', null, null);
 			}
 			else if(results.length == 1){
 				var send = results[0].teacher_id
@@ -31,7 +30,6 @@ var getId = function(username, callback){
 	client.query(
 		'SELECT student_id FROM student WHERE email ='+username+' ',
 		function(err, results, fields){
-			//console.log('Getting the results from teacher table....');
 			if (err) {
 				console.log('Error while serching student table to get ID for ',username,err);
 				callback(err, null, null);
@@ -47,9 +45,30 @@ var getId = function(username, callback){
 			}
 		}
 	);
+};
+var getIdByKey = function(key, callback){
+	var key = client.escape(key);
+	client.query(
+		'SELECT teacher_id FROM teacher WHERE key_used ='+key,
+		function(err, results, fields){
+			if (err) {
+				console.log('Error while serching teacher table to get ID for ',key,err);
+				callback('Internal database error getIdByKey 1', null);
+			}
+			else if(results.length == 1){
+				var send = results[0].teacher_id
+				callback(null, send);
+				return;
+			}
+			else{
+				callback('Internal database error getIdByKey 2', null);
+				return;
+			}
+		}
+	);
 }
+
 module.exports.validate = function(username, password, callback){
-	//console.log('Validating user ',username);
 	var username = client.escape(username);
 	var password = client.escape(password);
 	client.query(
@@ -104,7 +123,7 @@ module.exports.validate = function(username, password, callback){
 };
 
 module.exports.getGroups = function(username, callback){
-	getId(username, function(err,level,res){
+	getIdByUsername(username, function(err,level,res){
 			if(res){
 			client.query(
 				'SELECT * FROM student_keys WHERE requested_by ='+res,
@@ -129,8 +148,40 @@ module.exports.setFeetback = function(email,description){
 		[email,description]
 	);
 };
+
+module.exports.getStudentKey = function(key,callback){
+	var key = client.escape(key);
+	client.query(
+		'SELECT * FROM student_keys WHERE key_str ='+key,
+		function(err, results, fields){
+			if(err) {
+				console.log('Error while serching student_keys table for ',key,err);
+				callback(err, null);
+				return;
+			}
+			else if(results.length == 1){
+				if(results[0].students_left > 0){
+					callback(null, true, results[0].students_left);
+					return;
+				}
+				else{
+					callback('Number of students registrated with this key is over limit', false);
+					return;
+				}
+			}
+			else{
+				callback('Could not find requested key!', null);
+				return;
+			}
+		}
+	);
+};
+
+
+;
+
 module.exports.getTeacherKey = function(key,callback){
-	var key = client.escape(key).toUpperCase();
+	var key = client.escape(key);
 	client.query(
 		'SELECT * FROM teacher_keys WHERE key_str ='+key,
 		function(err, results, fields){
@@ -164,19 +215,18 @@ module.exports.setTeacher = function(key, email, password, firstName, lastName, 
 		function(err, results, fields){
 			if (err) {
 				console.log('Error while serching teacher table for ',email,err+' whhile trying to create new teacher');
-				callback('Internal database error', null);
+				callback('Internal database error setTeacher 1', null);
 				return;
 			}
 
 			else if(results.length == 0){
-			console.log('Quering the database',results.length)
 				client.query(
 					'INSERT INTO teacher SET key_used=?,first_name=?,last_name=?,institution_name=?,email=?,password=?',
 					[key,firstName,lastName,institution,email,password],
 					function(err){
 						if(err){
 							console.log('Error while inserting new teacher to teacher table for ',email,err);
-							callback('Internal database error while trying to create your account', null);
+							callback('Internal database error setTeacher 2', null);
 							return;
 						}
 						else{
@@ -185,7 +235,7 @@ module.exports.setTeacher = function(key, email, password, firstName, lastName, 
 								function(err){
 									if(err) {
 										console.log('Error while UPDATE teacher_keys table for ',key,err);
-										callback('Internal database eror while updating key', null);
+										callback('Internal database error setTeacher 3', null);
 										return;
 									}
 									else{
@@ -206,3 +256,66 @@ module.exports.setTeacher = function(key, email, password, firstName, lastName, 
 	);
 }
 
+module.exports.setStudent = function(email, password, firstName, lastName, key, callback){
+	var emailCh = client.escape(email);
+	client.query(
+		'SELECT * FROM student WHERE email ='+emailCh,
+		function(err, results, fields){
+			if (err) {
+				console.log('Error while serching student table for ',email,err+' whhile trying to create new teacher');
+				callback('Internal database error setStudent 1', null);
+				return;
+			}
+			else if(results.length == 0){
+				getIdByKey(key, function(err, result){
+					if(err){
+						callback(err, null);
+						return;
+					}
+					client.query(
+						'INSERT INTO student SET teacher_id=?, key_used=?,  first_name=?, last_name=?, email=?, password=?',
+						[result, key, firstName, lastName, email, password],
+						function(err){
+							if(err){
+								console.log('Error while inserting new student to student table for ',email,err);
+								callback('Internal database error setStudent 2', null);
+								return;
+							}
+							else{
+								client.query(
+									'SELECT * FROM  student_keys WHERE key_str ='+client.escape(key),
+									function(err, results, fields){
+										if(err){
+											callback('Internal database error setStudent 3', null);
+											console.log('Error while Selecting  student_keys from table for ',key,err);
+											return;
+										}
+										var left = (results[0].students_left - 1);
+										client.query(
+											'UPDATE student_keys SET  students_left ='+left +' WHERE key_str='+client.escape(key),
+											function(err){
+												if(err){
+													console.log('Error while UPDATE student_keys table for ',key,err);
+													callback('Internal database error setStudent 4', null);
+													return;
+												}
+												else{
+													callback(null, 'User succesfuly created! Sign in now');
+												}
+											}
+										);
+									}
+								);
+							}
+						}
+					);
+				});
+
+			}
+			else{
+				callback('Student with this email addres alredy existe!',null);
+				return;
+			}
+		}
+	);
+};

@@ -1,19 +1,19 @@
 .box
-	h3 Informations gathering for student hos teachers ID is #{id}
+	h3 Informations gathering for student where teacher ID is #{teacherId}
 	p Please fill in all the fields
-	p 
+	p
 		form(action='/new/student/submit', method='POST')
-			.inputAlined 
-				input(type='email', name='emial', id='email', placeholder='Full valid email address...')
-			.inputAlined 
-				input(type='email', name='verifyEmial', id='verifyEmial', placeholder='Retype email address...')
-			.inputAlined 
+			.inputAlined
+				input(type='email', name='email', id='email', placeholder='Full valid email address...')
+			.inputAlined
+				input(type='email', name='verifyEmail', id='verifyEmail', placeholder='Retype email address...')
+			.inputAlined
 				input(type='password', name='password', id='password', placeholder='Enter password...')
-			.inputAlined 
+			.inputAlined
 				input(type='password', name='verifyPassword', id='verifyPassword', placeholder='Confirm password...')
-			.inputAlined 
+			.inputAlined
 				input(type='text', name='firstName', id='firstName', placeholder='First name...')
-			.inputAlined 
+			.inputAlined
 				input(type='text', name='lastName', id='lastName', placeholder='Last name...')
-						
+
 			input(type='submit', class='button')
