@@ -20,6 +20,13 @@ span.leftPart
 		span(title='Give the corect answer to students after they sumbit their answer').blueBox Evacuate?
 			input#answer(type='checkbox', name='answer', value='Evacuate?')
 #map3d
+#legend(style='position:absolute; left:17px; top:61px; width:1.6em; height:1.47em')
+		#preko1(style='position:absolute; left:0; top:0; width:100%; height:100%; z-index:9')
+			.blueBox2
+				input#legendButton(type='button', value='+', onclick='VFT.lahar.teacher.buttons.list()')
+				|&nbspStudent answers
+			#results(style='overflow: auto; background-color:#CCFFFF;')
+		iframe(style='position:absolute; left:0px; top:0px; width:100%; height:100%; z-index:8', frameborder='0', scroling='no', scr='javascript:void(0)')
 
 #studentInterface
 	#chatBox

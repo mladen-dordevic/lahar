@@ -363,12 +363,13 @@ io.sockets.on('connection', function (socket) {
 	socket.on('evacuate',function(data){
 		var teacher = history.get('teacher',socket.user.key);
 		if(teacher){
-			var send = {
-				name: 'SERVER',
-				text: socket.user.firstName+' '+ socket.user.lastName+' voted: '+data
-			}
-			teacher.emit('message',send);
+			teacher.emit('result',{
+				firstName: socket.user.firstName,
+				lastName : socket.user.lastName,
+				answer : data
+			});
 		}
+
 	});
 	socket.on('disconnect', function () {
 		if(socket.user){

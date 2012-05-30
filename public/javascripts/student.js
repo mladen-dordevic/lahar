@@ -67,13 +67,14 @@ VFT.lahar.student = (function(){
 			if(!voted){
 				if(param){
 					if(confirm('Are you shoure you want to evacuate?\n Fasla evacuation could cost milions!\nEvacuate?')){
-						socket.emit('evacuate','EVACUATE!');
 						if(answer == true){
 							notify.add('Congratulations, you made correct decision!',2,10);
+							socket.emit('evacuate',true);
 							answer = null;
 						}
 						else if(answer == false){
 							notify.add('Unfortunately, you made wrong decision!',1,10);
+							socket.emit('evacuate',false);
 							answer = null;
 						};
 						voted = true;
@@ -84,13 +85,14 @@ VFT.lahar.student = (function(){
 				}
 				else{
 					if(confirm('Are you shoure you want to stay?!\nStay?')){
-						socket.emit('evacuate','STAY!');
 						if(answer == true){
 							notify.add('Unfortunately, you made wrong decision!',0,10);
+							socket.emit('evacuate',false);
 							answer = null;
 						}
 						else if(answer == false){
 							notify.add('Congratulations, you made correct decision!',2,10);
+							socket.emit('evacuate',true);
 							answer = null;
 						};
 						voted = true;

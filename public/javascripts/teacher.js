@@ -52,9 +52,16 @@ VFT.lahar.listeners = {
 VFT.lahar.teacher = (function(){
 	var socket = VFT.helpers.socket,
 		listeners = VFT.lahar.listeners,
+		notify = VFT.util.notification,
 		interval = null,
 		terrain = true,
+		listOn= false,
+		taskRunning = false,
+		blinkerTimer = null,
 		start = function(){
+			if(taskRunning)
+				stop();
+			taskRunning = true;
 			if($('timeAvailable').value)
 				var time = $('timeAvailable').value * 60;
 			if(isNaN(time))
@@ -67,6 +74,12 @@ VFT.lahar.teacher = (function(){
 					lon : listeners.marker.lon,
 				}
 			};
+			var el = document.createElement("div");
+			el.className='newAcc';
+			el.innerHTML = 'New task: '+listeners.marker.lat.toFixed(3)+'  '+listeners.marker.lon.toFixed(3);
+			var a = $('results');
+			a.appendChild(el);
+			a.scrollTop = a.scrollHeight;
 			var countDown = function(){
 				$('countDown').innerHTML = time.toString();
 				$('countDownProgress').max = time.toString();
@@ -91,9 +104,22 @@ VFT.lahar.teacher = (function(){
 			socket.emit('start excersize', send);
 		},
 		stop = function(){
-			$('countDown').innerHTML = 'STOPPED'
-			socket.emit('stop excersize');
-			clearInterval(interval);
+			if(taskRunning){
+				taskRunning = false;
+				$('countDown').innerHTML = 'STOPPED'
+				socket.emit('stop excersize');
+				clearInterval(interval);
+
+				var el = document.createElement("div");
+				el.className='newAcc';
+				el.innerHTML = 'Task completed';
+				var a = $('results');
+				a.appendChild(el);
+				a.scrollTop = a.scrollHeight;
+			}
+			else{
+				notify.add('There is nothing to stop',1,10);
+			}
 		},
 		setTerrain = function(){
 			if(terrain){
@@ -106,14 +132,54 @@ VFT.lahar.teacher = (function(){
 				ge.getLayerRoot().enableLayerById(ge.LAYER_TERRAIN , true);
 				terrain = true;
 			}
-		};
+		},
+		list = function(){
+			if(!listOn){
+				listOn = true;
+				var frame = $('legend'),
+					heightG = $('map3d').offsetHeight,
+					bord = $('results'),
+					heightFrame = heightG*3/4+'px';
+					heightBord =  (heightG*3/4- 15) +'px';
+				frame.style.height = heightFrame;
+				frame.style.width = '12em';
+				bord.style.dispaly = 'box';
+				bord.style.overflow = 'auto';
+				bord.style.height = heightBord;
+				$('legendButton').value = '-';
+				return;
+			}
+			else{
+				listOn = false;
+				var frame = $('legend'),
+					bord = $('results');
+				frame.style.height = '1.47em';
+				frame.style.width = '1.6em';
+				$('legendButton').value = '+';
+				bord.style.dispaly = 'none';
+				return;
+			}
+		}		
 	return {
 		buttons :{
 			start : start,
 			stop : stop,
-			setTerrain : setTerrain
-		}
-
+			setTerrain : setTerrain,
+			list: list
+		}		
 	}
-
 })();
+
+VFT.helpers.socket.on('result',function(data){
+	var el = document.createElement("div");
+	if(data.answer == true){
+		el.className='rightAnswer';
+	}
+	else{
+		el.className='wrongAnswer'
+	}
+	el.innerHTML = data.firstName +' '+ data.lastName ;
+	var a = $('results');
+	a.appendChild(el);
+	a.scrollTop = a.scrollHeight;
+});
