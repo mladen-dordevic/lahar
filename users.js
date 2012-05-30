@@ -9,7 +9,7 @@ client.query('USE lahar_project');
 var getIdByUsername = function(username, callback){
 	var username = client.escape(username);
 	client.query(
-		'SELECT teacher_id FROM teacher WHERE email ='+username+' ',
+		'SELECT lahar_project.teacher_id FROM teacher WHERE email ='+username+' ',
 		function(err, results, fields){
 			if (err) {
 				console.log('Error while serching teacher table to get ID for ',username,err);
@@ -28,7 +28,7 @@ var getIdByUsername = function(username, callback){
 	);
 
 	client.query(
-		'SELECT student_id FROM student WHERE email ='+username+' ',
+		'SELECT lahar_project.student_id FROM student WHERE email ='+username+' ',
 		function(err, results, fields){
 			if (err) {
 				console.log('Error while serching student table to get ID for ',username,err);
@@ -49,7 +49,7 @@ var getIdByUsername = function(username, callback){
 var getIdByKey = function(key, callback){
 	var key = client.escape(key);
 	client.query(
-		'SELECT teacher_id FROM teacher WHERE key_used ='+key,
+		'SELECT lahar_project.teacher_id FROM teacher WHERE key_used ='+key,
 		function(err, results, fields){
 			if (err) {
 				console.log('Error while serching teacher table to get ID for ',key,err);
@@ -72,12 +72,11 @@ module.exports.validate = function(username, password, callback){
 	var username = client.escape(username);
 	var password = client.escape(password);
 	client.query(
-		'SELECT * FROM teacher WHERE email ='+username+' AND password='+password,
+		'SELECT * FROM lahar_project.teacher WHERE email ='+username+' AND password='+password,
 		function(err, results, fields){
 			//console.log('Getting the results from teacher table....');
 			if (err) {
 				console.log('Error while serching teacher table for ',username,password,err);
-				throw err;
 			}
 			else if(results.length > 0){
 				var send = {
@@ -95,7 +94,7 @@ module.exports.validate = function(username, password, callback){
 	);
 
 	client.query(
-		'SELECT * FROM student WHERE email ='+username+' AND password='+password,
+		'SELECT * FROM lahar_project.student WHERE email ='+username+' AND password='+password,
 		function(err, results, fields){
 			//console.log('Getting the results from student table....');
 			if (err) {
@@ -126,7 +125,7 @@ module.exports.getGroups = function(username, callback){
 	getIdByUsername(username, function(err,level,res){
 			if(res){
 			client.query(
-				'SELECT * FROM student_keys WHERE requested_by ='+res,
+				'SELECT * FROM lahar_project.student_keys WHERE requested_by ='+res,
 				function(err, results, fields){
 					if (err) {
 						console.log('Error while serching student_keys table for ',res,err);
@@ -144,7 +143,7 @@ module.exports.setFeetback = function(email,description){
 	var email = client.escape(email);
 	var description = client.escape(description);
 	client.query(
-		'INSERT INTO feedback SET email=?,feedback_description=?',
+		'INSERT INTO lahar_project.feedback SET email=?,feedback_description=?',
 		[email,description]
 	);
 };
@@ -152,7 +151,7 @@ module.exports.setFeetback = function(email,description){
 module.exports.getStudentKey = function(key,callback){
 	var key = client.escape(key);
 	client.query(
-		'SELECT * FROM student_keys WHERE key_str ='+key,
+		'SELECT * FROM lahar_project.student_keys WHERE key_str ='+key,
 		function(err, results, fields){
 			if(err) {
 				console.log('Error while serching student_keys table for ',key,err);
@@ -183,7 +182,7 @@ module.exports.getStudentKey = function(key,callback){
 module.exports.getTeacherKey = function(key,callback){
 	var key = client.escape(key);
 	client.query(
-		'SELECT * FROM teacher_keys WHERE key_str ='+key,
+		'SELECT * FROM lahar_project.teacher_keys WHERE key_str ='+key,
 		function(err, results, fields){
 			if(err) {
 				console.log('Error while serching teacher_keys table for ',key,err);
@@ -211,7 +210,7 @@ module.exports.getTeacherKey = function(key,callback){
 module.exports.setTeacher = function(key, email, password, firstName, lastName, institution, callback){
 	var emailCh = client.escape(email);
 	client.query(
-		'SELECT * FROM teacher WHERE email ='+emailCh,
+		'SELECT * FROM lahar_project.teacher WHERE email ='+emailCh,
 		function(err, results, fields){
 			if (err) {
 				console.log('Error while serching teacher table for ',email,err+' whhile trying to create new teacher');
@@ -221,7 +220,7 @@ module.exports.setTeacher = function(key, email, password, firstName, lastName, 
 
 			else if(results.length == 0){
 				client.query(
-					'INSERT INTO teacher SET key_used=?,first_name=?,last_name=?,institution_name=?,email=?,password=?',
+					'INSERT INTO lahar_project.teacher SET key_used=?,first_name=?,last_name=?,institution_name=?,email=?,password=?',
 					[key,firstName,lastName,institution,email,password],
 					function(err){
 						if(err){
@@ -231,7 +230,7 @@ module.exports.setTeacher = function(key, email, password, firstName, lastName, 
 						}
 						else{
 							client.query(
-								'UPDATE teacher_keys SET  key_used =  1 WHERE key_str='+key,
+								'UPDATE lahar_project.teacher_keys SET  key_used =  1 WHERE key_str='+key,
 								function(err){
 									if(err) {
 										console.log('Error while UPDATE teacher_keys table for ',key,err);
