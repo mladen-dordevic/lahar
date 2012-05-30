@@ -2,8 +2,8 @@ VFT.lahar = {};
 VFT.lahar.listeners = {
 	marker : null,
 	start : function(){
-		var self = VFT.lahar.listeners;
-		var c = VFT.class;
+		var self = VFT.lahar.listeners,
+			c = VFT.class;
 		google.earth.addEventListener(ge.getWindow(), 'mousedown', self.mousedown);
 		google.earth.addEventListener(ge.getGlobe(), 'mousemove', self.mousemove);
 		google.earth.addEventListener(ge.getGlobe(), 'mouseup', self.mouseup);
@@ -50,62 +50,63 @@ VFT.lahar.listeners = {
 	}
 };
 VFT.lahar.teacher = (function(){
-	var socket = VFT.helpers.socket;
-	var listeners = VFT.lahar.listeners;
-	var interval = null;
-	var terrain = true;
-	var start = function(){
-		if($('timeAvailable').value)
-			var time = $('timeAvailable').value * 60;
-		if(isNaN(time))
-			time = 5 * 60;
-		var send = {
-			time : time,
-			location : {
-				lat : listeners.marker.lat,
-				lon : listeners.marker.lon,
-			}
-		};
-		var countDown = function(){
-			$('countDown').innerHTML = time.toString();
-			$('countDownProgress').max = time.toString();
-			$('countDownProgress').value = time.toString();
+	var socket = VFT.helpers.socket,
+		listeners = VFT.lahar.listeners,
+		interval = null,
+		terrain = true,
+		start = function(){
+			if($('timeAvailable').value)
+				var time = $('timeAvailable').value * 60;
+			if(isNaN(time))
+				time = 5 * 60;
+			var send = {
+				time : time,
+				answer : $('answer').checked,
+				location : {
+					lat : listeners.marker.lat,
+					lon : listeners.marker.lon,
+				}
+			};
+			var countDown = function(){
+				$('countDown').innerHTML = time.toString();
+				$('countDownProgress').max = time.toString();
+				$('countDownProgress').value = time.toString();
+				clearInterval(interval);
+				var timer = function(){
+					var timeLocal = $('countDown').innerHTML *1;
+					if (timeLocal > 1){
+						$('countDown').innerHTML = (timeLocal -1 ).toString();
+						$('countDownProgress').value = (timeLocal -2 ).toString();
+					}
+					else{
+						$('countDown').innerHTML = 'Time is up!';
+						VFT.util.notification.add('Time is up!',2,10);
+						VFT.sound.alert.play();
+						clearInterval(interval);
+					}
+				}
+				interval = setInterval(timer,1000);
+			};
+			countDown();
+			socket.emit('start excersize', send);
+		},
+		stop = function(){
+			$('countDown').innerHTML = 'STOPPED'
+			socket.emit('stop excersize');
 			clearInterval(interval);
-			var timer = function(){
-				var timeLocal = $('countDown').innerHTML *1;
-				if (timeLocal > 1){
-					$('countDown').innerHTML = (timeLocal -1 ).toString();
-					$('countDownProgress').value = (timeLocal -2 ).toString();
-				}
-				else{
-					$('countDown').innerHTML = 'Time is up!';
-					VFT.util.notification.add('Time is up!',2,10);
-					VFT.sound.alert.play();
-					clearInterval(interval);
-				}
+		},
+		setTerrain = function(){
+			if(terrain){
+				socket.emit('disable terrain');
+				ge.getLayerRoot().enableLayerById(ge.LAYER_TERRAIN , false);
+				terrain = false;
 			}
-			interval = setInterval(timer,1000);
+			else{
+				socket.emit('enable terrain');
+				ge.getLayerRoot().enableLayerById(ge.LAYER_TERRAIN , true);
+				terrain = true;
+			}
 		};
-		countDown();
-		socket.emit('start excersize', send);
-	}
-	var stop = function(){
-		$('countDown').innerHTML = 'STOPPED'
-		socket.emit('stop excersize');
-		clearInterval(interval);
-	}
-	var setTerrain = function(){
-		if(terrain){
-			socket.emit('disable terrain');
-			ge.getLayerRoot().enableLayerById(ge.LAYER_TERRAIN , false);
-			terrain = false;
-		}
-		else{
-			socket.emit('enable terrain');
-			ge.getLayerRoot().enableLayerById(ge.LAYER_TERRAIN , true);
-			terrain = true;
-		}
-	}
 	return {
 		buttons :{
 			start : start,

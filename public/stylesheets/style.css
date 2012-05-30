@@ -132,6 +132,7 @@ body {
 	background-color: #00CC33;
 	background: -webkit-linear-gradient(left, white, black);
     height:7px;
+	width:5em;
 }
 #helpMe{
 	position: absolute;
