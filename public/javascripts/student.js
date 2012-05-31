@@ -146,6 +146,7 @@ VFT.helpers.socket.on('start excersize',function(data){
 	placemark.setPlacemark();
 	VFT.lahar.student.events.start(data.time);
 	VFT.lahar.student.setAnswer(data.answer);
+	VFT.sound.start.play();
 });
 
 VFT.helpers.socket.on('stop excersize',function(data){

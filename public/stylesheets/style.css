@@ -123,8 +123,8 @@ body {
 	-o-transition: width .5s; /* Opera */
 }
 #logingIn:hover{
-	height : 230px;
-	width : 180px;
+	height : 220px;
+	width : 170px;
 }
 #logingIn.p{
 	margin: 0em auto;

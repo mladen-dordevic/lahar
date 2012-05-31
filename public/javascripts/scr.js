@@ -49,7 +49,8 @@ document.addEventListener("DOMContentLoaded",function(){
 			VFT.sound = {
 				test : new Audio( VFT.util.qualifyURL("../sounds/test.ogg")),
 				alert : new Audio( VFT.util.qualifyURL("../sounds/alert.wav")),
-				message : new Audio( VFT.util.qualifyURL("../sounds/message.wav"))
+				message : new Audio( VFT.util.qualifyURL("../sounds/message.wav")),
+				start : new Audio( VFT.util.qualifyURL("../sounds/start.wav"))
 			}
 		}
 		else{
