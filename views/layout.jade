@@ -27,8 +27,10 @@ html
 					- else
 						.blueBox
 							a(href='/') Sign In
-			.blueBox.leftPart
-				a(href='/feedback') +Feedback
+				.blueBox.leftPart
+					span
+						img(border='0', src='../images/fedback.gif', alt='Pulpit rock', width='16px',height='13px')
+						a(href='/feedback') Feedback
 
 			#notify.notifications
 				- if(flash.warning)

@@ -1,7 +1,7 @@
 var mysql = require('mysql'),
 	client = mysql.createClient({
 		user: 'root',
-		password: 'katana',
+		password: '',
 	}),
 	program = require('commander');
 

@@ -143,7 +143,7 @@ VFT.lahar.teacher = (function(){
 					heightBord =  (heightG*3/4- 15) +'px';
 				frame.style.height = heightFrame;
 				frame.style.width = '12em';
-				bord.style.dispaly = 'box';
+				bord.style.display = 'block';
 				bord.style.overflow = 'auto';
 				bord.style.height = heightBord;
 				$('legendButton').value = '-';
@@ -156,7 +156,7 @@ VFT.lahar.teacher = (function(){
 				frame.style.height = '1.47em';
 				frame.style.width = '1.6em';
 				$('legendButton').value = '+';
-				bord.style.dispaly = 'none';
+				bord.style.display = 'none';
 				return;
 			}
 		}		

@@ -1,5 +1,7 @@
+.blueBox
+	h2 Welcome to the Lahar exercise page
 #logingIn
-	h3 Please log in
+	h3 Sign in
 	form(action='/', method='POST')
 		p
 			label(for='login') Email:</br>
@@ -10,9 +12,10 @@
 			label(for='password') Password:</br>
 			input(type='password', name='password',style='width:95%; margine: 3px', id='password')
 		p
-			input(type='submit', class='button', style='float:right')
+			input(type='submit', class='button', style='float:right', value='Sign in')
 
 	#helpMe.blueBox
 		a(href='/new') New Account
 		| &nbsp
 		a(href='new/retrieve') Forgot Password
+
