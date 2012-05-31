@@ -50,6 +50,7 @@ VFT.lahar.student = (function(){
 						VFT.util.notification.add('Time is up!',2,10);
 						VFT.sound.alert.play();
 						clearInterval(interval);
+						voted = true;
 					}
 				}
 				interval = setInterval(timer,1000);
@@ -106,7 +107,7 @@ VFT.lahar.student = (function(){
 				$('countDown').innerHTML = 'DONE!';
 			}
 			else{
-				notify.add('You alredy submited your vote!',1,10);
+				notify.add('You alredy submited your vote, or no activity started or time is up!',1,10);
 			}
 		},
 		setAnswer = function(ans){
