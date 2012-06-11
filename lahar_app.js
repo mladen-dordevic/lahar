@@ -1,8 +1,14 @@
+var r = '\033[0m\033[31m',
+	g = '\033[0m\033[32m',
+	b = '\033[0m\033[34m',
+	rr = '\033[0m'
+
 /**
 * Module dependencies.
 */
 var express = require('express'),
-	users = require('./users');
+	users = require('./users'),
+	colors = require('colors');
 
 var app = express.createServer(),
 	io = require('socket.io').listen(app),
@@ -30,6 +36,18 @@ app.configure('development', function(){
 app.configure('production', function(){
 	app.use(express.errorHandler());
 	app.use(express.static(__dirname + '/public', { maxAge: 2592000000 }));
+});
+
+colors.setTheme({
+  input: 'grey',
+  verbose: 'cyan',
+  prompt: 'grey',
+  info: 'green',
+  data: 'grey',
+  help: 'cyan',
+  warn: 'yellow',
+  debug: 'blue',
+  error: 'red'
 });
 
 app.dynamicHelpers({
@@ -208,7 +226,7 @@ app.get('/new/retrieve', function(req,res){
 app.post('/new/teacher/key',function(req,res){
 	users.getTeacherKey(req.body.accountId,function(err,result){
 		if(err){
-			console.log('Teacher trying to submit key: '+req.body.accountId+'  Error from the database: '+err );
+			console.log('Teacher trying to submit key: %s \nError from the database: %s'.error,req.body.accountId ,err);
 			req.flash('warning', 'Key faild, it is eather activated or it does not existe!');
 			res.render('new/teacher');
 		}
@@ -323,7 +341,7 @@ io.sockets.on('connection', function (socket) {
 				text: socket.user.firstName+' joined the exercise!'
 			}
 			socket.broadcast.to(socket.user.key).emit('message',send);
-			console.log(socket.user.firstName+' logged in ',new Date()+' IP:',socket.handshake.address.address);
+			console.log('%s logged in %s from IP: %s'.info,socket.user.email, new Date(), socket.handshake.address.address);
 		}
 
 		socket.join(socket.user.key);
@@ -374,7 +392,7 @@ io.sockets.on('connection', function (socket) {
 	socket.on('disconnect', function () {
 		if(socket.user){
 			var user = socket.user;
-			console.log(user.firstName + ' Disconnected ' + new Date() );
+			console.log('User %s disconnected %s'.info, user.email, new Date() );
 			if(user.level = 1){
 				history.set('teacher', user.key, null)
 			}
@@ -385,4 +403,4 @@ io.sockets.on('connection', function (socket) {
 });
 
 
-console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
+console.log('Express server listening on port %d in %s mode'.info, app.address().port, app.settings.env);

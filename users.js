@@ -9,7 +9,7 @@ client.query('USE lahar_project');
 var getIdByUsername = function(username, callback){
 	var username = client.escape(username);
 	client.query(
-		'SELECT lahar_project.teacher_id FROM teacher WHERE email ='+username+' ',
+		'SELECT teacher_id FROM lahar_project.teacher WHERE email ='+username+' ',
 		function(err, results, fields){
 			if (err) {
 				console.log('Error while serching teacher table to get ID for ',username,err);
@@ -28,10 +28,10 @@ var getIdByUsername = function(username, callback){
 	);
 
 	client.query(
-		'SELECT lahar_project.student_id FROM student WHERE email ='+username+' ',
+		'SELECT student_id FROM lahar_project.student WHERE email ='+username+' ',
 		function(err, results, fields){
 			if (err) {
-				console.log('Error while serching student table to get ID for ',username,err);
+				console.log('Error while serching student table to get ID for %s \n %s ',username,err);
 				callback(err, null, null);
 			}
 			else if(results.length == 1){
@@ -49,10 +49,10 @@ var getIdByUsername = function(username, callback){
 var getIdByKey = function(key, callback){
 	var key = client.escape(key);
 	client.query(
-		'SELECT lahar_project.teacher_id FROM teacher WHERE key_used ='+key,
+		'SELECT teacher_id FROM lahar_project.teacher WHERE key_used ='+key,
 		function(err, results, fields){
 			if (err) {
-				console.log('Error while serching teacher table to get ID for ',key,err);
+				console.log('Error while serching teacher table to get ID for %s \n %s', key, err);
 				callback('Internal database error getIdByKey 1', null);
 			}
 			else if(results.length == 1){
@@ -73,10 +73,9 @@ module.exports.validate = function(username, password, callback){
 	var password = client.escape(password);
 	client.query(
 		'SELECT * FROM lahar_project.teacher WHERE email ='+username+' AND password='+password,
-		function(err, results, fields){
-			//console.log('Getting the results from teacher table....');
+		function(err, results, fields){			
 			if (err) {
-				console.log('Error while serching teacher table for ',username,password,err);
+				console.log('Error while serching teacher table for username: %s \n password: %s \n Error: %s',username, password, err);
 			}
 			else if(results.length > 0){
 				var send = {
@@ -86,7 +85,6 @@ module.exports.validate = function(username, password, callback){
 					level : 1,
 					key : results[0].key_used
 				};
-				//console.log('Sending to the app from database ',send)
 				callback(1,send);
 				return
 			}
@@ -95,10 +93,9 @@ module.exports.validate = function(username, password, callback){
 
 	client.query(
 		'SELECT * FROM lahar_project.student WHERE email ='+username+' AND password='+password,
-		function(err, results, fields){
-			//console.log('Getting the results from student table....');
+		function(err, results, fields){			
 			if (err) {
-				console.log('Error while serching teacher table for ',username,password,err);
+				console.log('Error while serching student table for username: %s \n password: %s \n Error: %s',username, password, err);
 				throw err;
 			}
 			else if(results.length > 0){
@@ -108,8 +105,7 @@ module.exports.validate = function(username, password, callback){
 					email : results[0].email,
 					level : 2,
 					key : results[0].key_used
-				};
-				//console.log('Sending to the app from database ',send)
+				};				
 				callback(2,send);
 				return;
 			}
@@ -128,7 +124,7 @@ module.exports.getGroups = function(username, callback){
 				'SELECT * FROM lahar_project.student_keys WHERE requested_by ='+res,
 				function(err, results, fields){
 					if (err) {
-						console.log('Error while serching student_keys table for ',res,err);
+						console.log('Error while serching student_keys table for %s \n %s ', res, err);
 						callback(err);
 						return;
 					}
@@ -154,7 +150,7 @@ module.exports.getStudentKey = function(key,callback){
 		'SELECT * FROM lahar_project.student_keys WHERE key_str ='+key,
 		function(err, results, fields){
 			if(err) {
-				console.log('Error while serching student_keys table for ',key,err);
+				console.log('Error while serching student_keys table for %s \n %s ',key,err);
 				callback(err, null);
 				return;
 			}
@@ -185,7 +181,7 @@ module.exports.getTeacherKey = function(key,callback){
 		'SELECT * FROM lahar_project.teacher_keys WHERE key_str ='+key,
 		function(err, results, fields){
 			if(err) {
-				console.log('Error while serching teacher_keys table for ',key,err);
+				console.log('Error while serching teacher_keys table for %s \n %s',key,err);
 				callback(err, null);
 				return;
 			}
@@ -213,7 +209,7 @@ module.exports.setTeacher = function(key, email, password, firstName, lastName, 
 		'SELECT * FROM lahar_project.teacher WHERE email ='+emailCh,
 		function(err, results, fields){
 			if (err) {
-				console.log('Error while serching teacher table for ',email,err+' whhile trying to create new teacher');
+				console.log('Error while serching teacher table for user: %s while trying to create new teacher \n Error: %s',email,err);
 				callback('Internal database error setTeacher 1', null);
 				return;
 			}
@@ -224,7 +220,7 @@ module.exports.setTeacher = function(key, email, password, firstName, lastName, 
 					[key,firstName,lastName,institution,email,password],
 					function(err){
 						if(err){
-							console.log('Error while inserting new teacher to teacher table for ',email,err);
+							console.log('Error while inserting %s teacher to teacher table \n Error: %s', email, err);
 							callback('Internal database error setTeacher 2', null);
 							return;
 						}
@@ -233,7 +229,7 @@ module.exports.setTeacher = function(key, email, password, firstName, lastName, 
 								'UPDATE lahar_project.teacher_keys SET  key_used =  1 WHERE key_str='+key,
 								function(err){
 									if(err) {
-										console.log('Error while UPDATE teacher_keys table for ',key,err);
+										console.log('Error while UPDATE teacher_keys table for %s \n Error: %s',key, err);
 										callback('Internal database error setTeacher 3', null);
 										return;
 									}
@@ -258,10 +254,10 @@ module.exports.setTeacher = function(key, email, password, firstName, lastName, 
 module.exports.setStudent = function(email, password, firstName, lastName, key, callback){
 	var emailCh = client.escape(email);
 	client.query(
-		'SELECT * FROM student WHERE email ='+emailCh,
+		'SELECT * FROM lahar_project.student WHERE email ='+emailCh,
 		function(err, results, fields){
 			if (err) {
-				console.log('Error while serching student table for ',email,err+' whhile trying to create new teacher');
+				console.log('Error while serching student table for %s while trying to create new teacher. \n Error: %s',email, err);
 				callback('Internal database error setStudent 1', null);
 				return;
 			}
@@ -272,7 +268,7 @@ module.exports.setStudent = function(email, password, firstName, lastName, key, 
 						return;
 					}
 					client.query(
-						'INSERT INTO student SET teacher_id=?, key_used=?,  first_name=?, last_name=?, email=?, password=?',
+						'INSERT INTO lahar_project.student SET teacher_id=?, key_used=?,  first_name=?, last_name=?, email=?, password=?',
 						[result, key, firstName, lastName, email, password],
 						function(err){
 							if(err){
@@ -282,7 +278,7 @@ module.exports.setStudent = function(email, password, firstName, lastName, key, 
 							}
 							else{
 								client.query(
-									'SELECT * FROM  student_keys WHERE key_str ='+client.escape(key),
+									'SELECT * FROM  lahar_project.student_keys WHERE key_str ='+client.escape(key),
 									function(err, results, fields){
 										if(err){
 											callback('Internal database error setStudent 3', null);
@@ -291,7 +287,7 @@ module.exports.setStudent = function(email, password, firstName, lastName, key, 
 										}
 										var left = (results[0].students_left - 1);
 										client.query(
-											'UPDATE student_keys SET  students_left ='+left +' WHERE key_str='+client.escape(key),
+											'UPDATE lahar_project.student_keys SET  students_left ='+left +' WHERE key_str='+client.escape(key),
 											function(err){
 												if(err){
 													console.log('Error while UPDATE student_keys table for ',key,err);
