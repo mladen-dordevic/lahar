@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jun 12, 2012 at 06:31 PM
+-- Generation Time: Jun 12, 2012 at 07:35 PM
 -- Server version: 5.5.16
 -- PHP Version: 5.3.8
 
@@ -73,7 +73,7 @@ CREATE TABLE IF NOT EXISTS `student` (
   `password` varchar(45) DEFAULT NULL,
   `accout_created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`student_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=17 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=18 ;
 
 --
 -- Dumping data for table `student`
@@ -91,10 +91,11 @@ INSERT INTO `student` (`student_id`, `key_used`, `teacher_id`, `first_name`, `la
 (10, 'stevenkey1', 2, 'Cody ', 'Adelson', 'a@jmu.edu', '12345', '2012-06-12 12:23:15'),
 (11, 'stevenkey1', 2, 'Kurt ', 'Belford', 'k@jmu.edu', '12345', '2012-06-12 12:23:41'),
 (12, 'stevenkey1', 2, 'Noreen', 'Stoval', 'n@jmu.edu', '12345', '2012-06-12 12:24:05'),
-(13, 'testteacher1key1', 3, 'Carmella ', 'Schimmel', 'c@www', '12345', '2012-06-12 12:25:29'),
+(13, 'testteacher1key1', 3, 'Carmella ', 'Schimmel', 'cc@www', '12345', '2012-06-12 13:34:44'),
 (14, 'testteacher1key1', 3, 'Carmella ', 'Vaugh', 'c@www', '12345', '2012-06-12 12:25:56'),
 (15, 'testteacher1key1', 3, 'Neil ', 'Velardi', 'n@www', '12345', '2012-06-12 12:26:26'),
-(16, 'testteacher1key1', 3, 'Javier ', 'Fiorenza', 'j@www', '12345', '2012-06-12 12:27:02');
+(16, 'testteacher1key1', 3, 'Javier ', 'Fiorenza', 'j@www', '12345', '2012-06-12 12:27:02'),
+(17, 'testteacher1key1', 3, 'Milan', 'Panic', 'm@www', '12345', '2012-06-12 13:35:25');
 
 -- --------------------------------------------------------
 
