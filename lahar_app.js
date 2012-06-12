@@ -222,6 +222,24 @@ app.get('/new/teacher', function(req,res){
 app.get('/new/retrieve', function(req,res){
 	res.render('new/retrieve');
 });
+app.post('/new/retrieve/submit', function(req, res){
+	users.recoverPassword(req.body.email, function(err, result){
+		if(err){
+			req.flash('warning', err);
+			res.render('new/retrieve');
+		}
+		else{
+			req.flash('info', result);
+			res.render('index');
+		}
+	});
+});
+
+//TODO solve how to get the info from the url
+app.get('/new/retrieve/submit?token', function(req, res){
+	console.log(req.params.token);
+
+})
 
 app.post('/new/teacher/key',function(req,res){
 	users.getTeacherKey(req.body.accountId,function(err,result){
@@ -298,10 +316,12 @@ app.get('/feedback', function(req, res){
 	res.render('feedback');
 });
 app.post('/feedback/index', function(req, res){
-	users.setFeetback(req.body.email,	req.body.description);
+	users.setFeetback(req.body.email, req.body.description);
 	req.flash('info', 'Thank you for your feedback.');
 	res.render('index');
 });
+
+
 app.get('*', function(req, res){
 	res.render('404')
 });

@@ -1,7 +1,7 @@
 var mysql = require('mysql'),
 	client = mysql.createClient({
 		user: 'root',
-		password: '',
+		password: 'katana',
 	}),
 	program = require('commander');
 
@@ -38,6 +38,23 @@ client.query(
 		}
 		else{
 			console.log('Table teacher succesfully created!');
+		}
+	}
+ );
+
+ client.query(
+	'CREATE TABLE IF NOT EXISTS recover_password('+
+	'token VARCHAR(33),'+
+	'email VARCHAR(45),'+
+	'token_used TINYINT(1),'+
+	'token_requested TIMESTAMP,'+
+	'PRIMARY KEY (token))',function(err){
+		if(err){
+			console.log('Error while creating table recover_password' );
+			return;
+		}
+		else{
+			console.log('Table recover_password succesfully created!');
 		}
 	}
  );

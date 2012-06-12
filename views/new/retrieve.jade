@@ -1,3 +1,8 @@
 .box
-	h3 Retreive password
-	p Under dewelopment
+	h3 Request password reset
+	p
+		form(action='/new/retrieve/submit', method='POST')
+			p Enter full email address that was used to register for the Lahar and instructions for the password reset will be sent.
+			.inputAlined
+				input(type='text', name='email', id='email', placeholder='Full valid email address...')			
+				input(type='submit', class='button')
