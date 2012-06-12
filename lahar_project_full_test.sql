@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
 -- version 3.3.9.2
--- http://www.phpmyadmin.net
+-- http://odu.edu.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jun 12, 2012 at 07:35 PM
--- Server version: 5.5.16
--- PHP Version: 5.3.8
+-- Generation Time: Jun 12, 2012 at 11:40 AM
+-- Server version: 5.0.92
+-- PHP Version: 5.3.6
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
@@ -26,11 +26,11 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 --
 
 CREATE TABLE IF NOT EXISTS `feedback` (
-  `f_id` int(11) NOT NULL AUTO_INCREMENT,
-  `email` varchar(45) DEFAULT NULL,
+  `f_id` int(11) NOT NULL auto_increment,
+  `email` varchar(45) default NULL,
   `feedback_description` text,
-  `feedback_created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`f_id`)
+  `feedback_created` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  PRIMARY KEY  (`f_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 --
@@ -45,11 +45,11 @@ CREATE TABLE IF NOT EXISTS `feedback` (
 --
 
 CREATE TABLE IF NOT EXISTS `recover_password` (
-  `token` varchar(33) NOT NULL DEFAULT '',
-  `email` varchar(45) DEFAULT NULL,
-  `token_used` tinyint(1) DEFAULT NULL,
-  `token_requested` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`token`)
+  `token` varchar(33) NOT NULL default '',
+  `email` varchar(45) default NULL,
+  `token_used` tinyint(1) default NULL,
+  `token_requested` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  PRIMARY KEY  (`token`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -64,15 +64,15 @@ CREATE TABLE IF NOT EXISTS `recover_password` (
 --
 
 CREATE TABLE IF NOT EXISTS `student` (
-  `student_id` int(11) NOT NULL AUTO_INCREMENT,
-  `key_used` varchar(45) DEFAULT NULL,
-  `teacher_id` int(11) DEFAULT NULL,
-  `first_name` varchar(45) DEFAULT NULL,
-  `last_name` varchar(45) DEFAULT NULL,
-  `email` varchar(45) DEFAULT NULL,
-  `password` varchar(45) DEFAULT NULL,
-  `accout_created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`student_id`)
+  `student_id` int(11) NOT NULL auto_increment,
+  `key_used` varchar(45) default NULL,
+  `teacher_id` int(11) default NULL,
+  `first_name` varchar(45) default NULL,
+  `last_name` varchar(45) default NULL,
+  `email` varchar(45) default NULL,
+  `password` varchar(45) default NULL,
+  `accout_created` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  PRIMARY KEY  (`student_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=18 ;
 
 --
@@ -80,22 +80,22 @@ CREATE TABLE IF NOT EXISTS `student` (
 --
 
 INSERT INTO `student` (`student_id`, `key_used`, `teacher_id`, `first_name`, `last_name`, `email`, `password`, `accout_created`) VALUES
-(1, 'declankey1', 1, 'Mladen', 'Dordevic', 'm@odu.edu', '12345', '2012-06-12 12:14:13'),
-(2, 'declankey1', 1, 'Steven', 'Wild', 's@odu.edu', '12345', '2012-06-12 12:14:59'),
-(4, 'declankey1', 1, 'Liza', 'Sherrard', 'l@odu.edu', '12345', '2012-06-12 12:16:15'),
-(5, 'declankey1', 1, 'Kelly ', 'Proto', 'k@odu.edu', '12345', '2012-06-12 12:19:09'),
-(6, 'declankey1', 1, 'Ted ', 'Rumore', 't@odu.edu', '12345', '2012-06-12 12:19:41'),
-(7, 'declankey1', 1, 'Carlene ', 'Piedra', 'c@odu.edu', '12345', '2012-06-12 12:20:20'),
-(8, 'stevenkey1', 2, 'Jamie ', 'Christofferse', 'j@jmu.edu', '12345', '2012-06-12 12:22:01'),
-(9, 'stevenkey1', 2, 'Darryl ', 'Grisson', 'd@jmu.edu', '12345', '2012-06-12 12:22:39'),
-(10, 'stevenkey1', 2, 'Cody ', 'Adelson', 'a@jmu.edu', '12345', '2012-06-12 12:23:15'),
-(11, 'stevenkey1', 2, 'Kurt ', 'Belford', 'k@jmu.edu', '12345', '2012-06-12 12:23:41'),
-(12, 'stevenkey1', 2, 'Noreen', 'Stoval', 'n@jmu.edu', '12345', '2012-06-12 12:24:05'),
-(13, 'testteacher1key1', 3, 'Carmella ', 'Schimmel', 'cc@www', '12345', '2012-06-12 13:34:44'),
-(14, 'testteacher1key1', 3, 'Carmella ', 'Vaugh', 'c@www', '12345', '2012-06-12 12:25:56'),
-(15, 'testteacher1key1', 3, 'Neil ', 'Velardi', 'n@www', '12345', '2012-06-12 12:26:26'),
-(16, 'testteacher1key1', 3, 'Javier ', 'Fiorenza', 'j@www', '12345', '2012-06-12 12:27:02'),
-(17, 'testteacher1key1', 3, 'Milan', 'Panic', 'm@www', '12345', '2012-06-12 13:35:25');
+(1, 'declankey1', 1, 'Mladen', 'Dordevic', 'mladen@odu.edu', '12345', '2012-06-12 11:31:22'),
+(2, 'declankey1', 1, 'Steven', 'Wild', 'steven@odu.edu', '12345', '2012-06-12 11:31:30'),
+(4, 'declankey1', 1, 'Liza', 'Sherrard', 'liza@odu.edu', '12345', '2012-06-12 11:31:44'),
+(5, 'declankey1', 1, 'Kelly ', 'Proto', 'kelly@odu.edu', '12345', '2012-06-12 11:31:57'),
+(6, 'declankey1', 1, 'Ted ', 'Rumore', 'ted@odu.edu', '12345', '2012-06-12 11:32:12'),
+(7, 'declankey1', 1, 'Carlene ', 'Piedra', 'carlene@odu.edu', '12345', '2012-06-12 11:32:24'),
+(8, 'stevenkey1', 2, 'Jamie ', 'Christofferse', 'jamie@jmu.edu', '12345', '2012-06-12 11:32:38'),
+(9, 'stevenkey1', 2, 'Darryl ', 'Grisson', 'darryl@jmu.edu', '12345', '2012-06-12 11:32:48'),
+(10, 'stevenkey1', 2, 'Cody ', 'Adelson', 'cody@jmu.edu', '12345', '2012-06-12 11:33:07'),
+(11, 'stevenkey1', 2, 'Kurt ', 'Belford', 'kurt@jmu.edu', '12345', '2012-06-12 11:33:24'),
+(12, 'stevenkey1', 2, 'Noreen', 'Stoval', 'noreen@jmu.edu', '12345', '2012-06-12 11:33:37'),
+(13, 'carolkey1', 3, 'Carmella ', 'Schimmel', 'carmella@odu.edu', '12345', '2012-06-12 11:33:59'),
+(14, 'carolkey1', 3, 'Carmella ', 'Vaugh', 'carmellav@odu.edu', '12345', '2012-06-12 11:34:15'),
+(15, 'carolkey1', 3, 'Neil ', 'Velardi', 'neil@odu.edu', '12345', '2012-06-12 11:34:32'),
+(16, 'carolkey1', 3, 'Javier ', 'Fiorenza', 'javier@odu.edu', '12345', '2012-06-12 11:34:46'),
+(17, 'carolkey1', 3, 'Milan', 'Panic', 'milan@odu.edu', '12345', '2012-06-12 11:35:01');
 
 -- --------------------------------------------------------
 
@@ -104,14 +104,14 @@ INSERT INTO `student` (`student_id`, `key_used`, `teacher_id`, `first_name`, `la
 --
 
 CREATE TABLE IF NOT EXISTS `student_keys` (
-  `key_str` varchar(45) NOT NULL DEFAULT '',
-  `group_name` varchar(45) DEFAULT NULL,
-  `requested_by` int(11) DEFAULT NULL,
-  `requested` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `alowed_students` int(11) DEFAULT NULL,
-  `students_left` int(11) DEFAULT NULL,
+  `key_str` varchar(45) NOT NULL default '',
+  `group_name` varchar(45) default NULL,
+  `requested_by` int(11) default NULL,
+  `requested` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  `alowed_students` int(11) default NULL,
+  `students_left` int(11) default NULL,
   `group_description` text,
-  PRIMARY KEY (`key_str`)
+  PRIMARY KEY  (`key_str`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -120,8 +120,8 @@ CREATE TABLE IF NOT EXISTS `student_keys` (
 
 INSERT INTO `student_keys` (`key_str`, `group_name`, `requested_by`, `requested`, `alowed_students`, `students_left`, `group_description`) VALUES
 ('declankey1', 'Decaln''s group', 1, '2012-06-12 12:29:40', 50, 45, 'Test group for Declan '),
-('stevenkey1', 'Steve''s group', 2, '2012-06-12 12:30:53', 50, 45, 'Steves test group'),
-('testteacher1key1', 'Testers', 3, '2012-06-12 12:30:16', 50, 45, 'Testers group description ');
+('stevenkey1', 'Steve''s group', 2, '2012-06-12 12:30:53', 50, 45, 'Test group for Steve'),
+('carolkey1', 'Carol''s group', 3, '2012-06-12 11:28:55', 50, 45, 'Test group for Carol');
 
 -- --------------------------------------------------------
 
@@ -130,15 +130,15 @@ INSERT INTO `student_keys` (`key_str`, `group_name`, `requested_by`, `requested`
 --
 
 CREATE TABLE IF NOT EXISTS `teacher` (
-  `teacher_id` int(11) NOT NULL AUTO_INCREMENT,
-  `key_used` varchar(45) DEFAULT NULL,
-  `first_name` varchar(45) DEFAULT NULL,
-  `last_name` varchar(45) DEFAULT NULL,
-  `institution_name` varchar(45) DEFAULT NULL,
-  `email` varchar(45) DEFAULT NULL,
-  `password` varchar(45) DEFAULT NULL,
-  `accout_created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`teacher_id`)
+  `teacher_id` int(11) NOT NULL auto_increment,
+  `key_used` varchar(45) default NULL,
+  `first_name` varchar(45) default NULL,
+  `last_name` varchar(45) default NULL,
+  `institution_name` varchar(45) default NULL,
+  `email` varchar(45) default NULL,
+  `password` varchar(45) default NULL,
+  `accout_created` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  PRIMARY KEY  (`teacher_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
 
 --
@@ -148,7 +148,7 @@ CREATE TABLE IF NOT EXISTS `teacher` (
 INSERT INTO `teacher` (`teacher_id`, `key_used`, `first_name`, `last_name`, `institution_name`, `email`, `password`, `accout_created`) VALUES
 (1, 'declankey1', 'Declan', 'De Paor', 'Old Dominion University', 'ddepaor@odu.edu', '12345', '2012-06-12 12:03:12'),
 (2, 'stevenkey1', 'Steven', 'Whitmeyer', 'James Madison University', 'whitmesj@jmu.edu', '12345', '2012-06-12 12:07:17'),
-(3, 'testteacher1key1', 'John', 'Doe', 'World University', 'john@www.org', '12345', '2012-06-12 12:10:50');
+(3, 'carolkey1', 'Carol', 'Simpson ', 'Old Dominion University', 'csimpson@odu.edu', '12345', '2012-06-12 11:36:47');
 
 -- --------------------------------------------------------
 
@@ -157,11 +157,11 @@ INSERT INTO `teacher` (`teacher_id`, `key_used`, `first_name`, `last_name`, `ins
 --
 
 CREATE TABLE IF NOT EXISTS `teacher_keys` (
-  `key_str` varchar(45) NOT NULL DEFAULT '',
-  `key_requested` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `key_send_to` varchar(45) DEFAULT NULL,
-  `key_used` tinyint(1) DEFAULT NULL,
-  PRIMARY KEY (`key_str`)
+  `key_str` varchar(45) NOT NULL default '',
+  `key_requested` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  `key_send_to` varchar(45) default NULL,
+  `key_used` tinyint(1) default NULL,
+  PRIMARY KEY  (`key_str`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -171,4 +171,4 @@ CREATE TABLE IF NOT EXISTS `teacher_keys` (
 INSERT INTO `teacher_keys` (`key_str`, `key_requested`, `key_send_to`, `key_used`) VALUES
 ('declankey1', '2012-06-12 12:02:12', 'ddepaor@odu.edu', 1),
 ('stevenkey1', '2012-06-12 12:05:26', 'whitmesj@jmu.edu', 1),
-('testteacher1key1', '2012-06-12 12:10:42', 'john@www.org', 1);
+('carolkey1', '2012-06-12 11:36:22', 'csimpson@odu.edu', 1);
