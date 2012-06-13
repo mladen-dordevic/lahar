@@ -80,22 +80,29 @@ CREATE TABLE IF NOT EXISTS `student` (
 --
 
 INSERT INTO `student` (`student_id`, `key_used`, `teacher_id`, `first_name`, `last_name`, `email`, `password`, `accout_created`) VALUES
-(1, 'declankey1', 1, 'Mladen', 'Dordevic', 'mladen@odu.edu', '12345', '2012-06-12 11:31:22'),
-(2, 'declankey1', 1, 'Steven', 'Wild', 'steven@odu.edu', '12345', '2012-06-12 11:31:30'),
-(4, 'declankey1', 1, 'Liza', 'Sherrard', 'liza@odu.edu', '12345', '2012-06-12 11:31:44'),
-(5, 'declankey1', 1, 'Kelly ', 'Proto', 'kelly@odu.edu', '12345', '2012-06-12 11:31:57'),
-(6, 'declankey1', 1, 'Ted ', 'Rumore', 'ted@odu.edu', '12345', '2012-06-12 11:32:12'),
-(7, 'declankey1', 1, 'Carlene ', 'Piedra', 'carlene@odu.edu', '12345', '2012-06-12 11:32:24'),
-(8, 'stevenkey1', 2, 'Jamie ', 'Christofferse', 'jamie@jmu.edu', '12345', '2012-06-12 11:32:38'),
-(9, 'stevenkey1', 2, 'Darryl ', 'Grisson', 'darryl@jmu.edu', '12345', '2012-06-12 11:32:48'),
-(10, 'stevenkey1', 2, 'Cody ', 'Adelson', 'cody@jmu.edu', '12345', '2012-06-12 11:33:07'),
-(11, 'stevenkey1', 2, 'Kurt ', 'Belford', 'kurt@jmu.edu', '12345', '2012-06-12 11:33:24'),
-(12, 'stevenkey1', 2, 'Noreen', 'Stoval', 'noreen@jmu.edu', '12345', '2012-06-12 11:33:37'),
-(13, 'carolkey1', 3, 'Carmella ', 'Schimmel', 'carmella@odu.edu', '12345', '2012-06-12 11:33:59'),
-(14, 'carolkey1', 3, 'Carmella ', 'Vaugh', 'carmellav@odu.edu', '12345', '2012-06-12 11:34:15'),
-(15, 'carolkey1', 3, 'Neil ', 'Velardi', 'neil@odu.edu', '12345', '2012-06-12 11:34:32'),
-(16, 'carolkey1', 3, 'Javier ', 'Fiorenza', 'javier@odu.edu', '12345', '2012-06-12 11:34:46'),
-(17, 'carolkey1', 3, 'Milan', 'Panic', 'milan@odu.edu', '12345', '2012-06-12 11:35:01');
+(1, 'teacher1', 1, 'Mladen', 'Dordevic', 'm', 'm', '2012-06-12 11:31:22'),
+
+(2, 'teacher1', 1, 'Patricia', 'Campbell', 'patricia.campbell@sru.edu', 'GEOL 101', '2012-06-12 11:31:22'),
+(3, 'teacher1', 1, 'Michele', 'Cooke', 'cooke@geo.umass.edu', 'GEOL 101', '2012-06-12 11:31:22'),
+(4, 'teacher1', 1, 'Declan', 'De Paor', 'ddepaor@odu.edu', 'GEOL 101', '2012-06-12 11:31:22'),
+(5, 'teacher1', 1, 'Elisa', 'Fitz-Diaz', 'fitzdiaz@umich.edu', 'GEOL 101', '2012-06-12 11:31:22'),
+
+(6, 'teacher2', 2, 'Chung', 'Huang', 'chung.huang@uconn.edu', 'STR 202', '2012-06-12 11:31:22'),
+(7, 'teacher2', 2, 'Steve', 'Hurst', 'shurst@illinois.edu', 'STR 202', '2012-06-12 11:31:22'),
+(8, 'teacher2', 2, 'Keith', 'Klepeis', 'kklepeis@uvm.edu', 'STR 202', '2012-06-12 11:31:22'),
+(9, 'teacher2', 2, 'Michelle', 'Markley', 'mmarkley@mtholyoke.edu', 'STR 202', '2012-06-12 11:31:22'),
+
+(10, 'teacher3', 3, 'Gautam', 'Mitra', 'gautam.mitra@rochester.edu', 'TEC 303', '2012-06-12 11:31:22'),
+(11, 'teacher3', 3, 'Matty', 'Mookerjee', 'matty.mookerjee@sonoma.edu', 'TEC 303', '2012-06-12 11:31:22'),
+(12, 'teacher3', 3, 'Terry', 'Pavlis', 'tlpavlis@utep.edu', 'TEC 303', '2012-06-12 11:31:22'),
+(13, 'teacher3', 3, 'Phil', 'Resor', 'presor@wesleyan.edu', 'TEC 303', '2012-06-12 11:31:22'),
+
+(14, 'teacher4', 4, 'Carol', 'Simpson', 'csimpson@odu.edu', 'PHYS 404', '2012-06-12 11:31:22'),
+(15, 'teacher4', 4, 'John', 'Singleton', 'jsingleton@mail.utexas.edu', 'PHYS 404', '2012-06-12 11:31:22'),
+(16, 'teacher4', 4, 'Sandra', 'Valle', 'zanvalleh@gmail.com', 'PHYS 404', '2012-06-12 11:31:22'),
+(17, 'teacher4', 4, 'Steph', 'Maes', 'maess@mail.strose.edu', 'PHYS 404', '2012-06-12 11:31:22');
+
+
 
 -- --------------------------------------------------------
 
@@ -119,9 +126,10 @@ CREATE TABLE IF NOT EXISTS `student_keys` (
 --
 
 INSERT INTO `student_keys` (`key_str`, `group_name`, `requested_by`, `requested`, `alowed_students`, `students_left`, `group_description`) VALUES
-('declankey1', 'Decaln''s group', 1, '2012-06-12 12:29:40', 50, 45, 'Test group for Declan '),
-('stevenkey1', 'Steve''s group', 2, '2012-06-12 12:30:53', 50, 45, 'Test group for Steve'),
-('carolkey1', 'Carol''s group', 3, '2012-06-12 11:28:55', 50, 45, 'Test group for Carol');
+('teacher1', 'Richard''s group', 1, '2012-06-12 12:29:40', 50, 45, 'Test group for Richard '),
+('teacher2', 'Tekla''s group', 2, '2012-06-12 12:30:53', 50, 45, 'Test group for Tekla'),
+('teacher3', 'Matthew''s group', 3, '2012-06-12 12:30:53', 50, 45, 'Test group for Matthew'),
+('teacher4', 'Sarah''s group', 4, '2012-06-12 11:28:55', 50, 45, 'Test group for Sarah');
 
 -- --------------------------------------------------------
 
@@ -146,10 +154,10 @@ CREATE TABLE IF NOT EXISTS `teacher` (
 --
 
 INSERT INTO `teacher` (`teacher_id`, `key_used`, `first_name`, `last_name`, `institution_name`, `email`, `password`, `accout_created`) VALUES
-(1, 'declankey1', 'Declan', 'De Paor', 'Old Dominion University', 'ddepaor@odu.edu', '12345', '2012-06-12 12:03:12'),
-(2, 'stevenkey1', 'Steven', 'Whitmeyer', 'James Madison University', 'whitmesj@jmu.edu', '12345', '2012-06-12 12:07:17'),
-(3, 'carolkey1', 'Carol', 'Simpson ', 'Old Dominion University', 'csimpson@odu.edu', '12345', '2012-06-12 11:36:47');
-
+(1, 'teacher1', 'Richard', 'Becker', 'UW-Madison', 'rabecker2@wisc.edu', 'teacher 101', '2012-06-12 12:03:12'),
+(2, 'teacher2', 'Tekla', 'Harms', 'Amherst College', 'taharms@amherst.edu', 'teacher 202', '2012-06-12 12:07:17'),
+(3, 'teacher3', 'Matthew', 'Massey ', 'U Kentucky', 'matthew.massey@uky.edu', 'teacher 303', '2012-06-12 11:36:47'),
+(4, 'teacher4', 'Sarah', 'Roeske ', 'U California Davis', 'smroeske@ucdavis.edu', 'teacher 404', '2012-06-12 11:36:47');
 -- --------------------------------------------------------
 
 --
@@ -169,6 +177,7 @@ CREATE TABLE IF NOT EXISTS `teacher_keys` (
 --
 
 INSERT INTO `teacher_keys` (`key_str`, `key_requested`, `key_send_to`, `key_used`) VALUES
-('declankey1', '2012-06-12 12:02:12', 'ddepaor@odu.edu', 1),
-('stevenkey1', '2012-06-12 12:05:26', 'whitmesj@jmu.edu', 1),
-('carolkey1', '2012-06-12 11:36:22', 'csimpson@odu.edu', 1);
+('teacher1', '2012-06-12 12:02:12', 'rabecker2@wisc.edu', 1),
+('teacher2', '2012-06-12 12:05:26', 'taharms@amherst.edu', 1),
+('teacher3', '2012-06-12 11:36:22', 'matthew.massey@uky.edu', 1),
+('teacher4', '2012-06-12 11:36:22', 'smroeske@ucdavis.edu', 1);

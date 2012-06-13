@@ -1,8 +1,3 @@
-var r = '\033[0m\033[31m',
-	g = '\033[0m\033[32m',
-	b = '\033[0m\033[34m',
-	rr = '\033[0m'
-
 /**
 * Module dependencies.
 */
@@ -236,8 +231,8 @@ app.post('/new/retrieve/submit', function(req, res){
 });
 
 //TODO solve how to get the info from the url
-app.get('/new/retrieve/submit?token', function(req, res){
-	console.log(req.params.token);
+app.get('/new/retrieve/submit:token', function(req, res){
+	console.log(req.params);
 
 })
 
