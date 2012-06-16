@@ -677,6 +677,7 @@ VFT.class = (function(){
 		this.placemarkName = name;
 		this.placemark = null;
 		this.myIcon = Placemark.nameIcon[name];
+		this.scale = 1;
 		this.placemarkExist = false;
 		if(!Placemark.nameIcon[name]) this.myIcon = Placemark.nameIcon['mladen'];
 	};
@@ -711,6 +712,7 @@ VFT.class = (function(){
 		icon.setHref(this.myIcon);
 		var style = ge.createStyle('');
 		style.getIconStyle().setIcon(icon);
+		style.getIconStyle().setScale(this.scale);
 		this.placemark.setStyleSelector(style);
 
 		this.point = ge.createPoint('');
@@ -1581,7 +1583,7 @@ VFT.helpers.draw.line = {
 	start : function(){
 		var line = VFT.helpers.draw.line;
 		if($("drawLine").value == 'Start Line'){
-			$("drawLineCont").style.display = 'block';
+			$("submenyLine").style.display = 'block';
 			$("drawLine").value = 'Stop Line';
 			google.earth.addEventListener(ge.getGlobe(), 'mousemove', line.onMouseMove);
 			google.earth.addEventListener(ge.getGlobe(), 'mouseup', line.onMouseUp);
@@ -1609,7 +1611,7 @@ VFT.helpers.draw.line = {
 		var line = VFT.helpers.draw.line;
 		if($("drawLine").value == 'Stop Line'){
 			$("drawLine").value = 'Start Line';
-			$("drawLineCont").style.display = 'none';
+			$("submenyLine").style.display = 'none';
 			google.earth.removeEventListener(ge.getGlobe(), 'mousemove', line.onMouseMove);
 			google.earth.removeEventListener(ge.getGlobe(), 'mouseup', line.onMouseUp);
 			google.earth.removeEventListener(ge.getGlobe(), 'mousedown', line.onMouseDown);
@@ -1783,7 +1785,7 @@ VFT.helpers.draw.polygon = {
 		}
 		polygon.firstRunn = false;
 		if($("drawPoly").value == 'Start Polygon'){
-			$("drawPolygonCont").style.display='block'
+			$("submenyPoly").style.display='block';
 			$("drawPoly").value = 'Stop Polygon'
 			google.earth.addEventListener(ge.getGlobe(), 'mousemove', polygon.onMouseMove);
 			google.earth.addEventListener(ge.getGlobe(), 'mouseup', polygon.onMouseUp);
@@ -1812,7 +1814,7 @@ VFT.helpers.draw.polygon = {
 		var polygon = VFT.helpers.draw.polygon;
 		if($("drawPoly").value == 'Stop Polygon'){
 			$("drawPoly").value = 'Start Polygon';
-			$("drawPolygonCont").style.display = 'none';
+			$("submenyPoly").style.display = 'none';
 			google.earth.removeEventListener(ge.getGlobe(), 'mousemove', polygon.onMouseMove);
 			google.earth.removeEventListener(ge.getGlobe(), 'mouseup', polygon.onMouseUp);
 			google.earth.removeEventListener(ge.getGlobe(), 'mousedown', polygon.onMouseDown);
@@ -2150,7 +2152,7 @@ VFT.helpers.draw.plane = {
 		plane.active = last;
 		last.lat = la.getLatitude();
 		last.lon = la.getLongitude();
-		last.alt = 1;
+		last.alt = ge.getGlobe().getGroundAltitude(last.lat, last.lon)+ 99;
 		last.heading = 45;
 		last.scaleX = 100;
 		last.scaleY = 100;
@@ -2201,7 +2203,6 @@ VFT.helpers.draw.plane = {
 		plane.helperPlacemark[1].lon = point.lon;
 		plane.helperPlacemark[1].myIcon = VFT.util.getHref('icon/moveAndRotate.png');
 		plane.helperPlacemark[1].setPlacemark(plane.rndB);
-		$('tiltSli').value = a.tilt;
 		$('rollSli').value = a.roll;
 		$('altitudeSli').value = a.alitude;
 		$('ySli').value = a.scaleY;
@@ -2287,7 +2288,7 @@ VFT.helpers.draw.plane = {
 			'Throw = <span id="offsetHeight"></br></span><input id="offsetHeightSli" type="range" min="-100" max="100" value="0" onchange = "VFT.helpers.draw.plane.offsetMove(this.value * 1,VFT.helpers.draw.plane.active.offPlane.offsetLength,VFT.helpers.draw.plane.active.offPlane.offsetHeadon)" /></br>'+
 			'Heave/Strike slip = <span id="offsetLength"></br></span><input id="offsetLengthSli" type="range" min="-100" max="100" value="0" onchange = "VFT.helpers.draw.plane.offsetMove(VFT.helpers.draw.plane.active.offPlane.offsetHeight, this.value * 1,VFT.helpers.draw.plane.active.offPlane.offsetHeadon)" /></br>';
 			$('altitudeFineSli').setAttribute('onMouseUp', "$('altitudeFineSli').min = VFT.helpers.draw.plane.active.alt -50; $('altitudeFineSli').max = VFT.helpers.draw.plane.active.alt + 50");
-			$("drawPlaneCont").style.display='block';
+			$("submenyPlane").style.display='block';
 			plane.write(plane.active);
 		}();
 		google.earth.addEventListener(ge.getWindow(), 'mousemove', plane.onMouseMove);
@@ -2311,7 +2312,7 @@ VFT.helpers.draw.plane = {
 		google.earth.removeEventListener(ge.getWindow(), 'mousedown', plane.onMouseDown);
 		var removeInterface = function(){
 			$('drwPlaneHolder').innerHTML = "";
-			$("drawPlaneCont").style.display='none';
+			$("submenyPlane").style.display='none';
 		}();
 		//save to a localstorage
 		var a = plane.modelHolder.compact();
@@ -2324,7 +2325,7 @@ VFT.helpers.draw.plane = {
 		if(plane.active == plane.modelHolder.last()){
 			var el = document.createElement("div");
 			var a = plane.modelHolder.length - 1;
-			socket.emit('new polygon', { name : VFT.Avatar.userName, group:'milisav', plane : JSON.stringify(plane.active)});
+			socket.emit('new plane', { name : VFT.Avatar.userName, group:'milisav', plane : JSON.stringify(plane.active)});
 			plane.active.collandaName = 'plane '+a;
 			el.innerHTML = 'plane '+a;
 			plane.active.collandaName = 'plane '+a;
@@ -2360,7 +2361,7 @@ VFT.helpers.draw.plane = {
 		plane.helperPlacemark[0].removePlacemark();
 		plane.helperPlacemark[1].removePlacemark();
 		plane.modelHolder[parseFloat(whom.id)] = null;
-		$(drawPlaneCont).removeChild($(whom.id))
+		$('drawPlaneCont').removeChild($(whom.id))
 		plane.discardCurent();
 	},
 	tilt : function(angle,whom){
