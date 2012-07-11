@@ -1,6 +1,7 @@
 VFT.lahar = {};
 VFT.lahar.listeners = {
 	marker : null,
+	town : null,
 	start : function(){
 		var self = VFT.lahar.listeners,
 			c = VFT.class;
@@ -8,45 +9,47 @@ VFT.lahar.listeners = {
 		google.earth.addEventListener(ge.getGlobe(), 'mousemove', self.mousemove);
 		google.earth.addEventListener(ge.getGlobe(), 'mouseup', self.mouseup);
 
-		self.marker = new c.Placemark();
+		self.marker = new c.Placemark('Alert!');
 		var placemark = self.marker;
 		placemark.setPoint(46.87227655080863,-121.852429523585932,0);
 		placemark.myIcon = VFT.util.qualifyURL('../icons/alert.png');
 		placemark.setPlacemark('marker');
 
+		self.town = new c.Placemark('Town');
+		var placemark = self.town;
+		placemark.setPoint(47,-122,0);
+		placemark.myIcon = VFT.util.qualifyURL('../icons/town.png');
+		placemark.setPlacemark('town');
+
 	},
 	dragInfo : null,
 	mousedown : function(event) {
 		var self = VFT.lahar.listeners;
-		if (event.getTarget().getId() == 'marker') {
-			// event.preventDefault();
+		if (event.getTarget().getType() == 'KmlPlacemark' &&
+        event.getTarget().getGeometry().getType() == 'KmlPoint') {
+			event.preventDefault();
 			var placemark = event.getTarget();
 			self.dragInfo = {
 				placemark: event.getTarget(),
+				name:  event.getTarget().getId(),
 				dragged: false
 			};
 		}
 	},
 	mousemove : function(event) {
 		var self = VFT.lahar.listeners;
-		if (self.dragInfo) {
+		if (self.dragInfo){
 			event.preventDefault();
 			var point = self.dragInfo.placemark.getGeometry();
 			point.setLatitude(event.getLatitude());
 			point.setLongitude(event.getLongitude());
-			self.marker.setPoint(event.getLatitude(),event.getLongitude(),0);
+			self[self.dragInfo.name].setPoint(event.getLatitude(),event.getLongitude(),0);
 			self.dragInfo.dragged = true;
 		}
 	},
 	mouseup : function(event) {
 		var self = VFT.lahar.listeners;
-		if (self.dragInfo.dragged) {
-			if (self.dragInfo.dragged) {
-				// if the placemark was dragged, prevent balloons from popping up
-				event.preventDefault();
-			}
-			self.dragInfo = null;
-		}
+		self.dragInfo = null;
 	}
 };
 VFT.lahar.teacher = (function(){
@@ -72,11 +75,16 @@ VFT.lahar.teacher = (function(){
 				location : {
 					lat : listeners.marker.lat,
 					lon : listeners.marker.lon,
+				},
+				town : {
+					lat : listeners.town.lat,
+					lon : listeners.town.lon
 				}
 			};
 			var el = document.createElement("div");
 			el.className='newAcc';
 			el.innerHTML = 'New task: '+listeners.marker.lat.toFixed(3)+'  '+listeners.marker.lon.toFixed(3);
+			el.innerHTML += '</br>Town: '+listeners.town.lat.toFixed(3)+'  '+listeners.town.lon.toFixed(3);
 			var a = $('results');
 			a.appendChild(el);
 			a.scrollTop = a.scrollHeight;
@@ -159,14 +167,14 @@ VFT.lahar.teacher = (function(){
 				bord.style.display = 'none';
 				return;
 			}
-		}		
+		}
 	return {
 		buttons :{
 			start : start,
 			stop : stop,
 			setTerrain : setTerrain,
 			list: list
-		}		
+		}
 	}
 })();
 

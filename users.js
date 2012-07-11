@@ -60,8 +60,19 @@ var getIdByKey = function(key, callback){
 }
 
 module.exports.validate = function(username, password, callback){
-	var username = client.escape(username);
-	var password = client.escape(password);
+	var username = client.escape(username),
+		password = client.escape(password),
+		guestKey = '084e0343a0486ff05530df6c705c8bb4';
+	if(username == '\'guest\''){
+		var send = {
+			name : 'Guest'+ Math.floor(Math.random()*10000),
+			lastName : 'Guest'+ Math.floor(Math.random()*10000),
+			email : 'Guest'+ Math.floor(Math.random()*10000),
+			level : 2,
+			key : guestKey
+		};
+		return callback(2,send);
+	}
 	client.query(
 		'SELECT * FROM lahar_project.teacher WHERE email ='+username+' AND password='+password,
 		function(err, results, fields){
@@ -237,8 +248,8 @@ module.exports.recoverPassword = function(email, callback){
 						return callback('Internal database error recoverPassword 1', null);
 					}
 					else{
-						/*this is the part that should send email to the user email address*/
-						console.log('http://localhost:3000/new/retrieve/submit?token='+link)
+						/*TODO this is the part that should send email to the user email address with link where link should be 'http://digitalplanet.org:3000/new/retrieve/submit?token='+link*/
+						console.log('http://localhost:3000/new/retrieve/submit?token='+link);
 						callback(null, 'Request succesfuly subbmited! Check you email and folow the instructions');
 					}
 				}

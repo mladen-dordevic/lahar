@@ -139,11 +139,20 @@ VFT.helpers.socket.on('disable terrain',function(){
 VFT.helpers.socket.on('start excersize',function(data){
 	if(VFT.lahar.marker)
 		VFT.lahar.marker.removePlacemark();
+	if(VFT.lahar.town)
+		VFT.lahar.town.removePlacemark();
 	var c = VFT.class;
-	VFT.lahar.marker = new c.Placemark();
+
+	VFT.lahar.marker = new c.Placemark('Alert');
 	var placemark = VFT.lahar.marker;
 	placemark.setPoint(data.location.lat, data.location.lon, 0);
 	placemark.myIcon = VFT.util.qualifyURL('../icons/alert.png');
+	placemark.setPlacemark();
+
+	VFT.lahar.town = new c.Placemark('Town');
+	var placemark = VFT.lahar.town;
+	placemark.setPoint(data.town.lat, data.town.lon, 0);
+	placemark.myIcon = VFT.util.qualifyURL('../icons/town.png');
 	placemark.setPlacemark();
 	VFT.lahar.student.events.start(data.time);
 	VFT.lahar.student.setAnswer(data.answer);
@@ -154,5 +163,7 @@ VFT.helpers.socket.on('stop excersize',function(data){
 	VFT.lahar.student.events.stop();
 	if(VFT.lahar.marker)
 		VFT.lahar.marker.removePlacemark();
+	if(VFT.lahar.town)
+		VFT.lahar.town.removePlacemark();
 	VFT.lahar.student.setAnswer(null);
 });
