@@ -2,7 +2,6 @@ body {
 	margin: 0px auto;
 	font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 	background-color: #FFFFCC;
-
 	background-size: 100%;
 	background-repeat: no-repeat;
 	background-image: url('/images/bground.jpg');
@@ -22,6 +21,11 @@ body {
 #header {
 	margin-bottom: 3px;
 	height: 1.6em;
+	border-bottom: 3px double #33CCFF;
+	padding-bottom:3px;
+	position: fixed;
+	top: 0;
+	width:100%;
 }
 #mainHeader{
 	margin: 0px auto;
@@ -38,7 +42,9 @@ body {
 #studentInterface{
 	padding-top: 5px;
 	height: 155px;
-	width: 100%;
+	position: absolute;
+	bottom:0px;
+	width:99%;
 }
 #countDown{
 	font-size : 1em;
@@ -72,7 +78,6 @@ body {
 	padding: 2px;
 	margin-top: 2px;
 	margin-right: 2px;
-
 	color: #fff;
 	text-decoration: none;
 	text-shadow: 1px 1px #1F272B;
@@ -87,16 +92,20 @@ body {
 	background: -webkit-linear-gradient(top, #3D4850 3%, #313D45 4%, #232B30 100%);
 }
 #map3d{
-	height: 60%;
+	position: absolute;
+	top : 26px;
+	bottom:158px;
 	width: 100%;
+
 }
 #container {
-	border-top: 3px double #33CCFF;
-	min-width: 888px;
-	min-height: 600px;
-	padding-right:1em;
-	padding-left:1em;
-	padding-top:3px;
+	position:absolute;
+	top: 33px;
+	bottom: 37px;
+	left: 10px;
+	right: 10px;
+	overflow:auto;
+	min-width: 900px;
 }
 #logingIn{
 	width: 170px;
@@ -136,6 +145,13 @@ body {
 	border: 1px solid #999999;
 	padding: 3px;
 }
+#legend{
+	position:absolute;
+	left:4px;
+	top:30px;
+	width:1.6em;
+	height:1.47em;
+}
 #legendButton{
 	border: 1px outset #999999;
 	margin:0;
@@ -163,7 +179,7 @@ body {
 }
 
 .box{
-	opacity:0.7;
+	opacity:0.85;
 	display: block;
 	border: 1px solid #999999;
 	background-color:#FC0;
@@ -211,6 +227,11 @@ body {
 	margin: 0em auto;
 	background-color:#FC0;
 	padding: 3px;
+	text-align: left;
+}
+.inputAlined p{
+	margin: 3px;
+	font-size:12px;
 }
 .rightPart{
 	float:right;
@@ -325,7 +346,6 @@ opacity:0.7;
 	height: auto;
 	font-size:10px;
 	text-align:center;
-	width:100%;
 	padding: 3px;
 	background-image: -webkit-linear-gradient(top, #DDFFFF, #66CCFF);
 	background-image:    -moz-linear-gradient(top, #DDFFFF, #66CCFF);

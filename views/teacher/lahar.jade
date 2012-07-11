@@ -1,4 +1,4 @@
-script(src='http://128.82.242.213:3000/socket.io/socket.io.js')
+script(src='http://localhost:3000/socket.io/socket.io.js')
 script(type='text/javascript', src='http://www.google.com/jsapi?key=ABQIAAAABHNYfw0c8TY6Kky2VsUIZBRxJlqEZOtgAh70Ol2NSRYv2PjlVBSDCmUQ6agcFV6SxfsHMzbanQvMJg')
 script(type='text/javascript', src='/javascripts/content.js')
 script(type='text/javascript', src='/javascripts/teacher.js')
@@ -20,7 +20,7 @@ span.leftPart
 		span(title='Give the corect answer to students after they sumbit their answer').blueBox Evacuate?
 			input#answer(type='checkbox', name='answer', value='Evacuate?')
 #map3d
-#legend(style='position:absolute; left:17px; top:61px; width:1.6em; height:1.47em')
+#legend
 		#preko1(style='position:absolute; left:0; top:0; width:100%; height:100%; z-index:9')
 			.blueBox2
 				input#legendButton(type='button', value='+', onclick='VFT.lahar.teacher.buttons.list()')

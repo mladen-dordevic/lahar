@@ -33,7 +33,7 @@ var getIdByUsername = function(username, callback){
 				return callback(null, 2,results[0].student_id);
 			}
 			else{
-				return callback(null);
+				return callback(null, null);
 			}
 		}
 	);
@@ -133,20 +133,15 @@ module.exports.setFeetback = function(email,description){
 module.exports.getStudentKey = function(key,callback){
 	var key = client.escape(key);
 	client.query(
-		'SELECT * FROM lahar_project.student_keys WHERE key_str ='+key,
+		'SELECT * FROM lahar_project.teacher WHERE key_used ='+key,
 		function(err, results, fields){
 			if(err) {
-				console.log('Error while serching student_keys table for %s \n %s ',key,err);
+				console.log('Error while serching teacher table for %s \n %s ',key,err);
 				return callback(err, null);
 
 			}
 			else if(results.length == 1){
-				if(results[0].students_left > 0){
-					return callback(null, true, results[0].students_left);
-				}
-				else{
-					return callback('Number of students registrated with this key is over limit', false);
-				}
+				return callback(null, true);
 			}
 			else{
 				return callback('Could not find requested key!', null);
@@ -154,35 +149,7 @@ module.exports.getStudentKey = function(key,callback){
 		}
 	);
 };
-
-
-;
-
-module.exports.getTeacherKey = function(key,callback){
-	var key = client.escape(key);
-	client.query(
-		'SELECT * FROM lahar_project.teacher_keys WHERE key_str ='+key,
-		function(err, results, fields){
-			if(err) {
-				console.log('Error while serching teacher_keys table for %s \n %s',key,err);
-				return callback(err, null);
-			}
-			else if(results.length > 0){
-				if(results[0].key_used){
-					return callback('Key alredy used by: '+results[0].key_send_to, null);
-				}
-				else{
-					return callback(null, results[0].key_send_to);
-				}
-				return callback(null, results);
-			}
-			else{
-				callback('Could not find requested key!', null);
-			}
-		}
-	);
-};
-module.exports.setTeacher = function(key, email, password, firstName, lastName, institution, callback){
+module.exports.setTeacher = function(firstName, middleName, lastName, academicTitle, institutionName, institutionLocation, departmentName, coursName, email, password, callback){
 	var emailCh = client.escape(email);
 	client.query(
 		'SELECT * FROM lahar_project.teacher WHERE email ='+emailCh,
@@ -194,37 +161,27 @@ module.exports.setTeacher = function(key, email, password, firstName, lastName, 
 
 			else if(results.length == 0){
 				client.query(
-					'INSERT INTO lahar_project.teacher SET key_used=?,first_name=?,last_name=?,institution_name=?,email=?,password=?',
-					[key,firstName,lastName,institution,email,password],
+					'INSERT INTO lahar_project.teacher SET key_used=?, first_name=?, middle_name=?, last_name=?, academic_title=?, institution_name=?, institution_location=?, department_name=?, cours_name=?, email=?, password=?',
+					[util.md5(email), firstName, middleName, lastName, academicTitle, institutionName, institutionLocation, departmentName, coursName, email, password],
 					function(err){
 						if(err){
 							console.log('Error while inserting %s teacher to teacher table \n Error: %s', email, err);
 							return callback('Internal database error setTeacher 2', null);
 						}
 						else{
-							client.query(
-								'UPDATE lahar_project.teacher_keys SET  key_used =  1 WHERE key_str='+key,
-								function(err){
-									if(err) {
-										console.log('Error while UPDATE teacher_keys table for %s \n Error: %s',key, err);
-										return callback('Internal database error setTeacher 3', null);
-									}
-									else{
-										return callback(null, 'User succesfuly created! Sign in now');
-									}
-								}
-							);
+							//TODO here system should email the teacker key that the students are going to use to create acounts
+							//aler admins that teacher created account.
+							return callback(null, 'User succesfuly created! Sign in now');
 						}
 					}
 				);
 			}
 			else{
-				return callback('Teacher with this email addres alredy existe!',null);
+				return callback('Teacher with this email addres alredy existe!', null);
 			}
 		}
 	);
-}
-
+};
 module.exports.setStudent = function(email, password, firstName, lastName, key, callback){
 	var emailCh = client.escape(email);
 	client.query(
@@ -248,28 +205,7 @@ module.exports.setStudent = function(email, password, firstName, lastName, key, 
 								return callback('Internal database error setStudent 2', null);
 							}
 							else{
-								client.query(
-									'SELECT * FROM  lahar_project.student_keys WHERE key_str ='+client.escape(key),
-									function(err, results, fields){
-										if(err){
-											console.log('Error while Selecting  student_keys from table for ',key,err);
-											return callback('Internal database error setStudent 3', null);
-										}
-										var left = (results[0].students_left - 1);
-										client.query(
-											'UPDATE lahar_project.student_keys SET  students_left ='+left +' WHERE key_str='+client.escape(key),
-											function(err){
-												if(err){
-													console.log('Error while UPDATE student_keys table for ',key,err);
-													return callback('Internal database error setStudent 4', null);
-												}
-												else{
-													callback(null, 'User succesfuly created! Sign in now');
-												}
-											}
-										);
-									}
-								);
+								callback(null, 'User succesfuly created! Sign in now');
 							}
 						}
 					);
@@ -309,6 +245,85 @@ module.exports.recoverPassword = function(email, callback){
 			);
 		}
 	})
+};
+module.exports.getToken = function(token, callback){
+	client.query(
+		'SELECT * FROM  lahar_project.recover_password WHERE token ='+client.escape(token)+'and token_used = 0',
+		function(err, results, fields){
+			if(err){
+				console.log('Error while Finding password recovery token  from recover_password table for %s/n',token ,err);
+				return callback('Internal database error getToken 1', null);
+			}
+			else if(results.length == 0 ){
+				return callback('Token was not found in the database or its alredy used', null);
+			}
+			else{
+				return callback(null, results[0].email);
+			};
+		}
+	);
+};
+module.exports.changePassword = function(email, password, token, callback){
+	getIdByUsername(email, function(err, level, id){
+		console.log('Level for passs change %s',level)
+		if(err){
+			console.log('Error while tryng to determen is user student or teacher changePassword 1 %s\n', err);
+			callback(err, null);
+		}
+		else if(level == 1){
+			client.query(
+				'UPDATE lahar_project.teacher SET  password ='+client.escape(password)+' WHERE email='+client.escape(email),
+				function(err){
+					if(err){
+						console.log('Error while updating  teacher password for %s changePassword 2 \n Error: %s',email, err)
+						callack('Error while updating  teacher password', null);
+					}
+					else{
+						client.query(
+							'UPDATE lahar_project.recover_password SET  token_used = 1 WHERE token='+client.escape(token),
+							function(err){
+								if(err){
+									console.log('Error while updating  recover password tokent to used changePassword 3 %s\n', err)
+									callack('Error while updating token table', null);
+								}
+								else{
+									callback(null, true);
+								}
+							}
+						);
+					}
+				}
+			);
+		}
+		else if(level == 2){
+			client.query(
+				'UPDATE lahar_project.student SET  password ='+client.escape(password)+' WHERE email='+client.escape(email),
+				function(err){
+					if(err){
+						console.log('Error while updating  student password for %s \nchangePassword 4 Error: %s',email, err)
+						callback('Error while updating  student password', null);
+					}
+					else{
+						client.query(
+							'UPDATE lahar_project.recover_password SET  token_used = 1 WHERE token='+client.escape(token),
+							function(err){
+								if(err){
+									console.log('Error while updating  recover password tokent to used changePassword 5 %s\n', err)
+									callack('Error while updating token table', null);
+								}
+								else{
+									callback(null, true);
+								}
+							}
+						);
+					}
+				}
+			);
+		}
+		else{
+			callback('No user with this email found', null);
+		}
 
+	});
+};
 
-}

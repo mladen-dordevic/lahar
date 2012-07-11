@@ -1,7 +1,48 @@
 .box
-	h3 Welcome!
-	p Please enter the key sent to you by administrator to create your account
-	p
-		form(action='/new/teacher/key', method='POST')
-			input(type='text', name='accountId', id='accountId')
+		p Instructor's passwords are available to professors and TAs at accredited institutions of higher education. Please enter your information in the following text fields:
+		form(action='/new/teacher/submit', method='POST')
+			.inputAlined
+				p First name:
+				input(type='text', name='firstName', id='firstName', placeholder='First name...')
+			.inputAlined
+				p Middle initials if any:
+				input(type='text', name='middleName', id='middleName', placeholder='Middle name...')
+			.inputAlined
+				p Last name:
+				input(type='text', name='lastName', id='lastName', placeholder='Last name...')
+			.inputAlined
+				p Academic Title:
+				input(type='text', name='academicTitle', id='academicTitle', placeholder='Academic Title...')
+			.inputAlined
+				p Institution Name:
+				input(type='text', name='institutionName', id='institutionName', placeholder='Institution Name...')
+			.inputAlined
+				p Institution city and state:
+				input(type='text', name='institutionLocation', id='institutionLocation', placeholder='Institution city and state...')
+			.inputAlined
+				p Department Name:
+				input(type='text', name='departmentName', id='departmentName', placeholder='Department Name...')
+
+			.inputAlined
+				p Course Name and number where the lab exercise will be used (if you are testing the exercise outside of course time, enter "TEST")
+				input(type='text', name='coursName', id='coursName')
+
+
+			.inputAlined
+				p Email address (note your email address is your user name. It must end in dot-edu. Undergraduate email addresses are not acceptable.):
+				input(type='email', name='email', id='email', placeholder='Full valid email address...')
+			.inputAlined
+				p Reconfirm email address:
+				input(type='email', name='verifyEmail', id='verifyEmail', placeholder='Retype email address...')
+
+			.inputAlined
+				p Verify that you are human. #{question}
+				input(type='text', name='answer', id='answer', placeholder='Enter answer...')
+				input(type="hidden", name='answer2', id='answer2', value='#{answer}')
+			.inputAlined
+				p Set the password at least 5 characters long.
+				input(type='password', name='password', id='password', placeholder='Enter password...')
+			.inputAlined
+				input(type='password', name='verifyPassword', id='verifyPassword', placeholder='Confirm password...')
+
 			input(type='submit', class='button')

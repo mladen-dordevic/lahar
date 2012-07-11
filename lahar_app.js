@@ -23,16 +23,13 @@ app.configure(function(){
 	app.use(express.static(__dirname + '/public'));
 	app.use(express.favicon(__dirname +  '/public/icons/favicon.ico', { maxAge: 2592000000 }));
 });
-
 app.configure('development', function(){
 	app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
 });
-
 app.configure('production', function(){
 	app.use(express.errorHandler());
 	app.use(express.static(__dirname + '/public', { maxAge: 2592000000 }));
 });
-
 colors.setTheme({
   input: 'grey',
   verbose: 'cyan',
@@ -44,6 +41,26 @@ colors.setTheme({
   debug: 'blue',
   error: 'red'
 });
+
+var human = {
+	this : human,
+	//TODO expand database question
+	questions : [{q:'What is 5 + 3?',a:'8'}, {q:'What is 3 + 3?',a:'6'}, {q:'What is 8 + 3?',a:'11'}, {q:'What color is a banana?',a:'yellow'}],
+	get : function(){
+		var ques = Math.random()* this.questions.length;
+		ques = Math.round(ques);
+		return {q : this.questions[ques].q, a : ques};
+	},
+	check : function(answer, number){
+			console.log(answer, this.questions[number*1].a);
+		if(answer == this.questions[number*1].a){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+};
 
 app.dynamicHelpers({
 	session: function(req,res){
@@ -71,8 +88,7 @@ function redir(req, res){
 	else{
 		res.redirect('/');
 	};
-}
-
+};
 function requireLogin0(req, res, next){
 	if(req.session.user && req.session.user.level == 0)
 		next();
@@ -102,9 +118,7 @@ function getAccountId(req, res, next){
 		req.flash('warning', 'To proccede you need to enter valid key!');
 		res.render('new');
 	}
-}
-
-
+};
 
 // Routes
 app.get('/', function(req, res){
@@ -114,17 +128,36 @@ app.get('/', function(req, res){
 	}
 	res.render('index');
 });
-
+app.post('/', function(req, res){
+	users.validate(req.body.username, req.body.password, function(level,user){
+		if(level){
+			req.session.user = user;
+			switch(level){
+				case 0:
+					res.render('admin', { locals : { user : user } } );
+				break;
+				case 1:
+					res.render('teacher', { locals : { user : user } });
+				break;
+				case 2:
+					res.render('student', { locals : { user : user } });
+				break;
+			}
+		}
+		else{
+			req.flash('warning', 'Login failed');
+			res.render('index');
+		}
+	})
+});
 app.get('/new', function(req,res){
 	res.render('new');
 });
-
 app.get('/new/student', function(req,res){
 	res.render('new/student');
 });
-
-app.post('/new/student',function(req,res){
-	users.getStudentKey(req.body.teacherId,function(err, result){
+app.post('/new/student', function(req,res){
+	users.getStudentKey(req.body.teacherId, function(err, result){
 		if(err){
 			req.flash('alert', err);
 			res.render('new/student');
@@ -139,7 +172,7 @@ app.post('/new/student',function(req,res){
 		}
 	});
 });
-app.post('/new/student/submit',getAccountId ,function(req,res){
+app.post('/new/student/submit', getAccountId, function(req,res){
 	var body = req.body;
 	if(body.email != body.verifyEmail){
 		req.flash('alert', 'You must use same email in confirm email field!');
@@ -175,32 +208,42 @@ app.post('/new/student/submit',getAccountId ,function(req,res){
 
 	});
 });
-app.post('/new/teacher/submit', getAccountId, function(req, res){
+app.get('/new/teacher', function(req,res){
+	var test = human.get();
+	res.render('new/teacher', {locals : {question: test.q, answer: test.a}});
+});
+app.post('/new/teacher/submit', function(req, res){
 	var body = req.body;
+	var test = human.get();
+	if(!human.check(body.answer, body.answer2)){
+		req.flash('alert', 'Please werify that you are a human!');
+		res.render('new/teacher', {locals : {question: test.q, answer: test.a}});
+		return;
+	};
 	if(body.email != body.verifyEmail){
 		req.flash('alert', 'You must use same email in confirm email field!');
-		res.render('new/account', {locals : {accountId: req.session.account.accountId, email : req.session.account.email }});
+		res.render('new/teacher', {locals : {question: test.q, answer: test.a}});
 		return;
 	};
 	if(body.password.length < 5){
 		req.flash('alert', 'Password needs to have at least 5 characters!');
-		res.render('new/account', {locals : {accountId: req.session.account.accountId, email : req.session.account.email }});
+		res.render('new/teacher', {locals : {question: test.q, answer: test.a}});
 		return;
 	}
 	if(body.password  != body.verifyPassword){
 		req.flash('alert', 'You must use same password in confirm password field!');
-		res.render('new/account', {locals : {accountId: req.session.account.accountId, email : req.session.account.email }});
+		res.render('new/teacher', {locals : {question: test.q, answer: test.a}});
 		return;
 	};
-	if(body.firstName == false || body.lastName == false ||body.schoolName == false){
+	if(body.firstName == false || body.lastName == false || body.schoolName == false){
 		req.flash('alert', 'Please fill in all the fields!');
-		res.render('new/account', {locals : {accountId: req.session.account.accountId, email : req.session.account.email }});
+		res.render('new/teacher', {locals : {question: test.q, answer: test.a}});
 		return;
 	}
-	users.setTeacher(req.session.account.accountId, body.email, body.password, body.firstName, body.lastName, body.schoolName, function(err,result){
+		users.setTeacher(body.firstName, body.middleName, body.lastName, body.academicTitle, body.institutionName, body.institutionLocation, body.departmentName, body.coursName, body.email, body.password, function(err,result){
 		if(err){
 			req.flash('alert', err);
-			res.render('new/account', {locals : {accountId: req.session.account.accountId, email : req.session.account.email }});
+			res.render('new/teacher', {locals : {question: test.q, answer: test.a}});
 			return;
 		}
 		else{
@@ -208,11 +251,6 @@ app.post('/new/teacher/submit', getAccountId, function(req, res){
 			res.render('index');
 		}
 	});
-});
-
-
-app.get('/new/teacher', function(req,res){
-	res.render('new/teacher');
 });
 app.get('/new/retrieve', function(req,res){
 	res.render('new/retrieve');
@@ -229,69 +267,54 @@ app.post('/new/retrieve/submit', function(req, res){
 		}
 	});
 });
-
-//TODO solve how to get the info from the url
-app.get('/new/retrieve/submit:token', function(req, res){
-	console.log(req.params);
-
-})
-
-app.post('/new/teacher/key',function(req,res){
-	users.getTeacherKey(req.body.accountId,function(err,result){
+app.get('/new/retrieve/submit:token?', function(req, res){
+	users.getToken(req.query.token, function(err, email){
 		if(err){
-			console.log('Teacher trying to submit key: %s \nError from the database: %s'.error,req.body.accountId ,err);
-			req.flash('warning', 'Key faild, it is eather activated or it does not existe!');
-			res.render('new/teacher');
-		}
-		else if(result){
-			req.session.account = {
-				accountId: req.body.accountId,
-				email: result,
-				level : 1
-			};
-			res.render('new/account', {locals : {accountId: req.body.accountId, email : result }});
-		};
-	});
-});
-
-app.post('/', function(req, res){
-	users.validate(req.body.username, req.body.password, function(level,user){
-		if(level){
-			req.session.user = user;
-			switch(level){
-				case 0:
-					res.render('admin', { locals : { user : user } } );
-				break;
-				case 1:
-					res.render('teacher', { locals : { user : user } });
-				break;
-				case 2:
-					res.render('student', { locals : { user : user } });
-				break;
-			}
+			req.flash('warning', err);
+			res.render('new/retrieve');
 		}
 		else{
-			req.flash('warning', 'Login failed');
-			res.render('index');
+			res.render('new/newpassword', {locals : {email : email, token : req.query.token}});
 		}
-	})
-})
+	});
+});
+app.post('/new/retrieve/newpassword', function(req,res){
+	var body = req.body;
+	if(body.password.length < 5){
+		req.flash('alert', 'Password needs to have at least 5 characters!');
+		res.render('new/newpassword', {locals : {email : body.email, token : body.token}});
+		return;
+	}
+	if(body.password  != body.verifyPassword){
+		req.flash('alert', 'You must use same password in confirm password field!');
+		res.render('new/newpassword', {locals : {email : body.email, token : body.token}});
+		return;
+	};
+	users.changePassword(body.email, body.password, body.token, function(err, val){
+		if(err){
+			req.flash('warning', err);
+			res.render('new/newpassword', {locals : {email : body.email, token : body.token}});
+		}
+		else{
+			req.flash('alert', 'Password changed succesfully!');
+			res.render('index', {locals : {email : body.email, token : body.token}});
+		}
+	});
 
+});
 app.get('/admin', requireLogin0, function(req, res){
 	res.render('admin');
 });
-
-app.get('/teacher',requireLogin1, function(req, res){
+app.get('/teacher', requireLogin1, function(req, res){
 	res.render('teacher');
 });
-app.get('/teacher/manage',requireLogin1, function(req, res){
+app.get('/teacher/manage', requireLogin1, function(req, res){
 	res.render('teacher/manage');
 });
-
-app.get('/teacher/lahar',requireLogin1, function(req, res){
+app.get('/teacher/lahar', requireLogin1, function(req, res){
 	res.render('teacher/lahar');
 });
-app.get('/student',requireLogin2, function(req, res){
+app.get('/student', requireLogin2, function(req, res){
 	res.render('student');
 });
 app.get('/logout', function(req, res){
@@ -315,8 +338,6 @@ app.post('/feedback/index', function(req, res){
 	req.flash('info', 'Thank you for your feedback.');
 	res.render('index');
 });
-
-
 app.get('*', function(req, res){
 	res.render('404')
 });
@@ -416,6 +437,4 @@ io.sockets.on('connection', function (socket) {
 		}
 	});
 });
-
-
 console.log('Express server listening on port %d in %s mode'.info, app.address().port, app.settings.env);

@@ -22,16 +22,21 @@ console.log('Database lahar_project succesfuly created!');
 client.query('USE lahar_project');
 
 client.query(
-	'CREATE TABLE IF NOT EXISTS teacher('+
-	'teacher_id INT(11) NOT NULL AUTO_INCREMENT,'+
-	'key_used VARCHAR(45),'+
-	'first_name VARCHAR(45),'+
-	'last_name VARCHAR(45),'+
-	'institution_name VARCHAR(45),'+
-	'email VARCHAR(45),'+
-	'password VARCHAR(45),'+
-	'accout_created TIMESTAMP,'+
-	'PRIMARY KEY (teacher_id))',function(err){
+	'CREATE TABLE IF NOT EXISTS teacher ('+
+	  'teacher_id int(11) NOT NULL AUTO_INCREMENT,'+
+	  'key_used varchar(45) DEFAULT NULL,'+
+	  'first_name varchar(45) DEFAULT NULL,'+
+	  'middle_name varchar(45) DEFAULT NULL,'+
+	  'last_name varchar(45) DEFAULT NULL,'+
+	  'academic_title varchar(45) DEFAULT NULL,'+
+	  'institution_name varchar(45) DEFAULT NULL,'+
+	  'institution_location varchar(45) NOT NULL,'+
+	  'department_name varchar(45) DEFAULT NULL,'+
+	  'cours_name varchar(45) DEFAULT NULL,'+
+	  'email varchar(45) DEFAULT NULL,'+
+	  'password varchar(45) DEFAULT NULL,'+
+	  'accout_created timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,'+
+	  'PRIMARY KEY (teacher_id))', function(err){
 		if(err){
 			console.log('Error while creating table teacher' );
 			return;
@@ -58,24 +63,6 @@ client.query(
 		}
 	}
  );
-
-client.query(
-	'CREATE TABLE IF NOT EXISTS teacher_keys('+
-	'key_str VARCHAR(45),'+
-	'key_requested TIMESTAMP,'+
-	'key_send_to VARCHAR(45),'+
-	'key_used TINYINT(1),'+
-	'PRIMARY KEY (key_str))',
-	function(err){
-		if(err){
-			console.log('Error while creating table teacher_keys',err );
-			return;
-		}
-		else{
-			console.log('Table teacher_keys succesfully created!');
-		}
-	}
-);
 
 client.query(
 	'CREATE TABLE IF NOT EXISTS student_keys('+
