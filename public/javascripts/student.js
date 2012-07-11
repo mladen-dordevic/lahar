@@ -26,8 +26,8 @@ VFT.lahar.student = (function(){
 				$('legendImage').removeChild($('legendImage').childNodes[0]);
 				var frame = $('legend')
 				frame.style.height = '1.47em';
-				frame.style.width = '1.6em';
-				$('legendButton').value = '+';
+				frame.style.width = '2.8em';
+				$('legendButton').value = 'KEY';
 				legendOn = false;
 			};
 		},

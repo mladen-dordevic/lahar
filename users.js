@@ -38,7 +38,6 @@ var getIdByUsername = function(username, callback){
 		}
 	);
 };
-
 var getIdByKey = function(key, callback){
 	var key = client.escape(key);
 	client.query(
@@ -65,9 +64,9 @@ module.exports.validate = function(username, password, callback){
 		guestKey = '084e0343a0486ff05530df6c705c8bb4';
 	if(username == '\'guest\''){
 		var send = {
-			name : 'Guest'+ Math.floor(Math.random()*10000),
-			lastName : 'Guest'+ Math.floor(Math.random()*10000),
-			email : 'Guest'+ Math.floor(Math.random()*10000),
+			name : 'Guest_'+ Math.floor(Math.random()*10000),
+			lastName : 'Guest_'+ Math.floor(Math.random()*10000),
+			email : 'Guest_'+ Math.floor(Math.random()*10000),
 			level : 2,
 			key : guestKey
 		};
@@ -92,7 +91,6 @@ module.exports.validate = function(username, password, callback){
 			}
 		}
 	);
-
 	client.query(
 		'SELECT * FROM lahar_project.student WHERE email ='+username+' AND password='+password,
 		function(err, results, fields){
@@ -115,23 +113,6 @@ module.exports.validate = function(username, password, callback){
 		}
 	);
 };
-
-module.exports.getGroups = function(username, callback){
-	getIdByUsername(username, function(err,level,res){
-			if(res){
-			client.query(
-				'SELECT * FROM lahar_project.student_keys WHERE requested_by ='+res,
-				function(err, results, fields){
-					if (err) {
-						console.log('Error while serching student_keys table for %s \n %s ', res, err);
-						return callback(err);
-					}
-					return callback(null, 2, results);
-				}
-			);
-		}
-	});
-};
 module.exports.setFeetback = function(email,description){
 	var email = client.escape(email);
 	var description = client.escape(description);
@@ -140,8 +121,7 @@ module.exports.setFeetback = function(email,description){
 		[email,description]
 	);
 };
-
-module.exports.getStudentKey = function(key,callback){
+module.exports.getStudentKey = function(key, callback){
 	var key = client.escape(key);
 	client.query(
 		'SELECT * FROM lahar_project.teacher WHERE key_used ='+key,
@@ -149,7 +129,6 @@ module.exports.getStudentKey = function(key,callback){
 			if(err) {
 				console.log('Error while serching teacher table for %s \n %s ',key,err);
 				return callback(err, null);
-
 			}
 			else if(results.length == 1){
 				return callback(null, true);
@@ -221,7 +200,6 @@ module.exports.setStudent = function(email, password, firstName, lastName, key, 
 						}
 					);
 				});
-
 			}
 			else{
 				return callback('Student with this email addres alredy existe!',null);
