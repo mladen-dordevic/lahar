@@ -343,7 +343,7 @@ app.get('*', function(req, res){
 });
 app.listen(3000);
 
-//socket server running...
+//socket server runnin g...
 io.sockets.on('connection', function (socket) {
 	socket.on('initiate',function(data){
 		/*based upon data.user (unic useer name (email)) from datbase look up the details for the user
